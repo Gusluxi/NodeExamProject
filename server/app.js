@@ -1,17 +1,18 @@
 import path from "path";
-//Express
+
+//################# Express ####################
 import express from "express";
 const app = express();
 app.use(express.json());
 app.use(express.static(path.resolve("../client/public")));
 app.use(express.urlencoded({extended: true}));
 
-//Helmet
+//################# Helmet ####################
 import helmet from "helmet";
 app.use(helmet());
 
-
-//Limiter, overvej hvor mange comments er nødvendige her i forhold til product ready code
+//################# Rate Limiter ####################
+//overvej hvor mange comments er nødvendige her i forhold til product ready code
 import rateLimit from "express-rate-limit";
 
 const baseLimiter = rateLimit({
@@ -36,8 +37,7 @@ const authLimiter = rateLimit({
 app.use(baseLimiter);
 app.use("/auth", authLimiter);
 
-
-//Session
+//################# Sessions ####################
 import session from "express-session";
 app.use(session({
     secret: 'GusLobf',
@@ -46,11 +46,11 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-//Cors
+//################# Cors ####################
 import cors from "cors";
 app.use(cors());
 
-//Routers
+//################# Routers ####################
 import usersRouter from "./routers/usersRouter.js";
 import surveysRouter from "./routers/surveysRouter.js";
 import answersRouter from "./routers/answersRouter.js";
@@ -58,7 +58,7 @@ import questionsRouter from "./routers/questionsRouter.js";
 app.use(usersRouter, surveysRouter, answersRouter, questionsRouter);
 
 
-
+//################# Server ####################
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log("Starting server on port:", PORT);
