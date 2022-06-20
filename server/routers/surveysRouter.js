@@ -28,6 +28,21 @@ router.post("/api/surveys", async (req, res) => {
 
 
 //################# PATCH survey ####################
+router.patch("/api/surveys/:id", async (req, res) => {
+    if (req.session.loggedIn) {
+        const userid = req.session.userID;
+        const surveyid = Number(req.params.id);
+        const { title } = req.body;
+        const foundSurvey = await db.get(`SELECT * FROM surveys where id = ? and userid = ?;`, surveyid, userid);
+            if (foundSurvey) {
+                const { changes } = await db.run(`UPDATE surveys SET title = ? WHERE id = ?;`, [title, surveyid]);
+            return res.send({ rowsAffected: changes });
+            };
+        
+        return res.send({error: `No survey with id ${surveyid} on your account`})
+    }
+    res.send({error: "not logged in"})
+});
 
 
 
@@ -40,7 +55,7 @@ router.delete("/api/surveys/:id", async (req, res) => {
         if (changes !== 0) {
             return res.send({ rowsDeleted: changes })
         }
-        return res.send({error: `No product by id: ${surveyid}`})
+        return res.send({error: `No survey by id: ${surveyid}`})
     }
 });
 
