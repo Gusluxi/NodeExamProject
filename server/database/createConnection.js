@@ -5,4 +5,5 @@ const db = await open({
     filename: 'survey.db',
     driver: sqlite3.Database
 })
+db.exec("PRAGMA foreign_keys = ON");
 export default db;

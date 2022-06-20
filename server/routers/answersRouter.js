@@ -4,9 +4,10 @@ import db from "../database/createConnection.js";
 
 
 //################# GET answers ####################
-router.get("/api/answers", async (req, res) => {
-    const answers = await db.all("SELECT * FROM answers;");
- 
+router.get("/api/answers/questions/:id", async (req, res) => {
+    const questionid = Number(req.params.id);
+    console.log(questionid);
+    const answers = await db.all(`SELECT * FROM answers WHERE questionid = ?;`, questionid);
     res.send({ data: answers });
 });
 
@@ -24,6 +25,7 @@ router.post("/api/answers", async (req, res) => {
 
 
 //################# DELETE answer ####################
+/*
 router.delete("/api/answers/:id", async (req, res) => {
         const answerid = Number(req.params.id);
         const { changes } = await db.run(`DELETE FROM answers WHERE id = ?`, answerid);
@@ -32,6 +34,7 @@ router.delete("/api/answers/:id", async (req, res) => {
         }
         return res.send({error: `No product by id: ${answerid}`})
 });
+*/
 
 
 export default router;
