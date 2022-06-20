@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start-dev": "nodemon app.js",
+    "start-dev": "cross-env PORT=3000 nodemon app.js",
     "start": "node app.js",
     "createdb": "node ./database/createSchema.js"
   },
@@ -35,5 +35,8 @@
     "nodemailer": "^6.7.3",
     "sqlite": "^4.0.25",
     "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

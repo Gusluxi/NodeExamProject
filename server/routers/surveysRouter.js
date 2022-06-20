@@ -2,14 +2,16 @@ import { json, Router } from "express";
 const router = Router();
 import db from "../database/createConnection.js";
 
-//Get
+
+//################# GET surveys ####################
 router.get("/api/surveys", async (req, res) => {
     const surveys = await db.all("SELECT * FROM surveys;");
  
     res.send({ data: surveys });
 });
 
-//Post
+
+//################# POST survey ####################
 router.post("/api/surveys", async (req, res) => {
         const { title, userid } = req.body;
         const { changes } = await db.run(`INSERT INTO surveys (title, userid) VALUES (?, ?);`, [title, userid]);
@@ -17,10 +19,12 @@ router.post("/api/surveys", async (req, res) => {
 });
 
 
-//Patch here
+
+//################# PATCH survey ####################
 
 
-//Delete
+
+//################# DELETE survey ####################
 router.delete("/api/surveys/:id", async (req, res) => {
         const surveyid = Number(req.params.id);
         const { changes } = await db.run(`DELETE FROM surveys WHERE id = ?`, surveyid);

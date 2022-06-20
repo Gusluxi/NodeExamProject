@@ -24,18 +24,37 @@ const baseLimiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-const authLimiter = rateLimit({
+const signupLimiter = rateLimit({
     //the line below limits the window auth times, after 15 minutes the limit will be reset
-	windowMs: 15 * 60 * 1000, // 15 minutes
+	windowMs: 5 * 60 * 1000, // 5 minutes
+    //The client is allowed to access 5 times
+	max: 10, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+const loginLimiter = rateLimit({
+    //the line below limits the window auth times, after 15 minutes the limit will be reset
+	windowMs: 5 * 60 * 1000, // 5 minutes
     //The client is allowed to access 5 times
 	max: 5, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
+const validationLimiter = rateLimit({
+    //the line below limits the window auth times, after 15 minutes the limit will be reset
+	windowMs: 5 * 60 * 1000, // 5 minutes
+    //The client is allowed to access 5 times
+	max: 30, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 app.use(baseLimiter);
-app.use("/auth", authLimiter);
+app.use("/auth/signup", signupLimiter);
+app.use("/auth/login", loginLimiter);
+app.use("/valid", validationLimiter);
 
 //################# Sessions ####################
 import session from "express-session";
