@@ -5,6 +5,7 @@ html, body {
 }
 
 body {
+	
 	background-color: #652e7a;
 	background-image:url("./images/night-sky.jpg");
 	background-size: cover;
@@ -12,7 +13,7 @@ body {
 	margin: 0;
 	padding: 4px;
 	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: 'Courier New', Courier, monospace;
 }
 
 

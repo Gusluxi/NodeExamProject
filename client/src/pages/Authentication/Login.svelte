@@ -95,12 +95,12 @@
         font-size: 1.5rem;
         border: solid 4px #c5c5c5;;
         padding: 2rem;
-        width: 11em;
+        width: 350px;
         margin: auto;
     }
     #signup-area {
         font-size: 1.5rem;
-        width: 11em;
+        width: 350px;
         padding: 2rem;
         margin: auto;
     }

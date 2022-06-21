@@ -6,9 +6,9 @@
     const navigate = useNavigate();
 	const location = useLocation();
 
-    let username;
-    let email;
-    let password;
+    let newUsername;
+    let newEmail;
+    let newPassword;
 
     function showToast(msg) {
         toast.push(msg, {
@@ -20,15 +20,15 @@
 
     async function handleSignup() {
         let validUser = true;
-        if (!username || String(username).length > 18) {
+        if (!newUsername || String(newUsername).length > 18) {
             validUser = false;
             showToast("Please add a username between 0-18 char");
         }
-        if (!email || String(email).length > 320) {
+        if (!newEmail || String(newEmail).length > 320) {
             validUser = false;
             showToast("Please add a valid email");
         }
-        if (!password || String(password).length > 30) {
+        if (!newPassword || String(newPassword).length > 30) {
             validUser = false;
             showToast("Please add a valid password");
         } 
@@ -40,9 +40,9 @@
                 "Accept": "application/json"
             },
 			body: JSON.stringify({
-				username,
-                email,
-                password
+				newUsername,
+                newEmail,
+                newPassword
 			})
 		    });
             const result = await response.json();
@@ -57,29 +57,30 @@
 <div id="account-wrapper">
     <div id="login-area">
         <h4>Create a new account</h4>
-        <div autocomplete="off">
+        <div>
+
             <input
-                bind:value={username}
-                type="text"
-                name="username"
-                placeholder="Username"
-                autocomplete="off"
-            />
-            <br/>
-            <input
-                bind:value={email}
+                bind:value={newEmail}
                 type="email"
-                name="email"
+                name="newEmail"
                 placeholder="Email"
                 autocomplete="off"
             />
             <br />
             <input
-                bind:value={password}
+                bind:value={newUsername}
+                type="text"
+                name="newUsername"
+                placeholder="Username"
+                autocomplete="new-username"
+            />
+            <br/>
+            <input
+                bind:value={newPassword}
                 type="password"
-                name="password"
+                name="newPassword"
                 placeholder="Password"
-                autocomplete="off"
+                autocomplete="new-password"
             />
             <br />
             <button on:click={handleSignup} type="submit">Signup</button>
@@ -100,7 +101,7 @@
         font-size: 1.5rem;
         border: solid 4px #c5c5c5;
         padding: 2rem;
-        width: 11em;
+        width: 350px;
         margin: auto;
     }
 </style>

@@ -36,7 +36,7 @@
 		<nav>
 			<Link to="/">Home</Link>
 			<Link to="/about">About</Link>
-			<Link to="/surveys/view">Surveys(Guarded)</Link>
+			<Link to="/surveys/view">Surveys</Link>
 			{#if (!$user.loggedIn)}
 				<Link to="/login">Login</Link>
 				<Link to="/signup">Signup</Link>
@@ -46,9 +46,7 @@
 			{/if}
 			
 		</nav>
-		{#if ($user.loggedIn)}
-			<h1>Hej {$user.currentUser.username}</h1>
-		{/if}
+		
 		
 		<Route path="/" component={Frontpage} />
 		<Route path="/about" component={About} />
@@ -82,6 +80,7 @@
 		max-width: 240px;
 		margin: 0 auto;
 	}
+
 	nav {
 		margin: auto;
 		padding: 30px 0px;
@@ -90,13 +89,15 @@
 		-webkit-box-shadow: 0px 0px 19px 1px rgba(0,0,0,0.75);
 		-moz-box-shadow: 0px 0px 19px 1px rgba(0,0,0,0.75);
 	}
+
 	:global(a) {
+		font-size: 1.7rem;
 		padding: 30px;
 		text-transform: uppercase;
         text-decoration: none;
-		font-size: large;
 		color: #e7e7e7;
     }
+
 	:global(a):hover {
 		color: #89daff;
 		background-color: #5574b8;
@@ -104,6 +105,7 @@
 		-webkit-box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
 		-moz-box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
 		transition: 0.3s;
+		font-weight: bold;
 	}
 
 	@media (min-width: 640px) {
