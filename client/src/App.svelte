@@ -1,5 +1,7 @@
 <script>
 	import { Link, Router, Route } from "svelte-navigator";
+	import { SvelteToast } from '@zerodevx/svelte-toast';
+	
 	import About from "./pages/About/About.svelte";
 	import Login from './pages/Authentication/Login.svelte';
 	import Signup from './pages/Authentication/Signup.svelte';
@@ -10,6 +12,7 @@
 	import OverviewSurvey from "./pages/SurveyManager/OverviewSurvey.svelte";
 	import StatsSurvey from "./pages/SurveyManager/StatisticSurvey.svelte";
 	import PrivateRoute from "./routes/PrivateRoute.svelte";
+	const options = {};
 </script>
 
 
@@ -29,7 +32,7 @@
 		<Route path="/signup" component={Signup} />
 		<Route path="/takeSurvey/*" component={SurveyForm} />
 
-		<PrivateRoute path="/surveys/*" let:location>
+		<PrivateRoute path="/surveys" let:location>
 			<OverviewSurvey />
 		</PrivateRoute>
 		
@@ -47,6 +50,8 @@
 		
 	</Router>
 </main>
+
+<SvelteToast {options} />
 
 <style>
 	main {
