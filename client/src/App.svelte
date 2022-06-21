@@ -29,7 +29,7 @@
 	}
 
 </script>
-
+<SvelteToast {options} />
 
 <main>
 	<Router>
@@ -72,7 +72,7 @@
 		
 	</Router>
 </main>
-<SvelteToast {options} />
+
 <style>
 	main {
 		text-align: center;
