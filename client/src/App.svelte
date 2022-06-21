@@ -50,9 +50,7 @@
 		
 	</Router>
 </main>
-
 <SvelteToast {options} />
-
 <style>
 	main {
 		text-align: center;
