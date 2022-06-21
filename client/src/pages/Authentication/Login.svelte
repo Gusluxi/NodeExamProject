@@ -11,6 +11,7 @@
     let password;
     let attemptsRemaning;
 
+    console.log($user);
     
 
     async function login() {

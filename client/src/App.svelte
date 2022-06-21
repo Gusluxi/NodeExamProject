@@ -1,6 +1,9 @@
 <script>
 	import { Link, Router, Route } from "svelte-navigator";
+	
 	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { user } from "./stores/authStore.js";
+	import { baseURL } from "./stores/generalStore.js";
 	
 	import About from "./pages/About/About.svelte";
 	import Login from './pages/Authentication/Login.svelte';
@@ -13,6 +16,18 @@
 	import StatsSurvey from "./pages/SurveyManager/StatisticSurvey.svelte";
 	import PrivateRoute from "./routes/PrivateRoute.svelte";
 	const options = {};
+
+	async function handleLogout() {
+		const response = await fetch($baseURL + '/logout');
+        const result = await response.json();
+        console.log(result);
+        
+        if (result.loggedIn === false) {
+            user.set(result.loggedIn)
+			user.currentuser.set({})
+        }
+	}
+
 </script>
 
 
@@ -21,31 +36,35 @@
 		<nav>
 			<Link to="/">Home</Link>
 			<Link to="/about">About</Link>
-			<Link to="/surveys">Surveys(Guarded)</Link>
-			{#if condition}
+			<Link to="/surveys/view">Surveys(Guarded)</Link>
+			{#if (!$user.loggedIn)}
 				<Link to="/login">Login</Link>
 				<Link to="/signup">Signup</Link>
 			{/if}
-			{#if condition}
-				<Link to="/">Logout</Link>
+			{#if ($user.loggedIn)}
+				<Link on:click="{handleLogout}" to="/">Logout</Link>
 			{/if}
 			
 		</nav>
+		{#if ($user.loggedIn)}
+			<h1>Hej {$user.currentUser.username}</h1>
+		{/if}
+		
 		<Route path="/" component={Frontpage} />
 		<Route path="/about" component={About} />
 		<Route path="/login" component={Login} />
 		<Route path="/signup" component={Signup} />
 		<Route path="/takeSurvey/*" component={SurveyForm} />
 
-		<PrivateRoute path="/surveys" let:location>
+		<PrivateRoute path="/surveys/view" let:location>
 			<OverviewSurvey />
 		</PrivateRoute>
 		
-		<PrivateRoute path="/surveys/*/stats" let:location>
+		<PrivateRoute path="/surveys/stats" let:location>
 			<StatsSurvey />
 		</PrivateRoute>
 		
-		<PrivateRoute path="/surveys/*/edit" let:location>
+		<PrivateRoute path="/surveys/edit" let:location>
 			<EditSurvey />
 		</PrivateRoute>
 		
