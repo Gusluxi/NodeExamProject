@@ -1,4 +1,4 @@
-import { json, Router } from "express";
+import { Router } from "express";
 const router = Router();
 import db from "../database/createConnection.js";
 import { hashPassword, compareToDatabase } from "../password.js";

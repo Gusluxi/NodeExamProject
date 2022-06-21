@@ -1,5 +1,5 @@
 <script>
-	import { Router, Route } from "svelte-navigator";
+	import { Link, Router, Route } from "svelte-navigator";
 	import About from "./pages/About/About.svelte";
 	import Login from './pages/Authentication/Login.svelte';
 	import Signup from './pages/Authentication/Signup.svelte';
@@ -13,8 +13,16 @@
 </script>
 
 
+
 <main>
 	<Router>
+		<nav>
+			<Link to="/">Home</Link>
+			<Link to="/about">About</Link>
+			<Link to="/surveys">Surveys(Guarded)</Link>
+			<Link to="/login">Login</Link>
+			<Link to="/signup">Signup</Link>
+		</nav>
 		<Route path="/" component={Frontpage} />
 		<Route path="/about" component={About} />
 		<Route path="/login" component={Login} />
@@ -46,6 +54,23 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+	}
+	nav {
+		max-width: 960px;
+		margin: auto;
+		padding: 30px 0px;
+		background-color: bisque;
+	}
+	:global(a) {
+		padding: 30px;
+		text-transform: uppercase;
+        text-decoration: none;
+		font-size: large;
+		color: white;;
+    }
+	:global(a):hover {
+		color: black;
+		background-color: beige;
 	}
 
 	@media (min-width: 640px) {
