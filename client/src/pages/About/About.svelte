@@ -13,6 +13,6 @@
     text-align:justify;
     font-size: 1.2rem;
     margin: auto;
-    width: 40%
+    width: 50vh
  }
 </style>

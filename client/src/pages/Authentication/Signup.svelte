@@ -9,15 +9,37 @@
     let newUsername;
     let newEmail;
     let newPassword;
+    let inputTextColor;
+    let disabledStatus = true;
 
     function showToast(msg) {
         toast.push(msg, {
                 theme: {
                     '--toastBackground': '#ffdc6a',
-                    '--toastBarBackground': '#C53030'
+                    '--toastColor': '#424242',
+                    '--toastBarBackground': '#C53030',
             }});
     }
 
+    function handleInput(event) {
+        const emailValidation = isEmailValid(event.target.value);
+        if(!emailValidation) {
+            showToast("Email is invalid");
+            inputTextColor = "red";
+            disabledStatus = true;
+        } else {
+            inputTextColor = "normal";
+            disabledStatus = false;
+        }
+    }
+
+    function isEmailValid(email) {
+        const emailRegexp = new RegExp(
+            /^[a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1}([a-zA-Z0-9][\-_\.\+\!\#\$\%\&\'\*\/\=\?\^\`\{\|]{0,1})*[a-zA-Z0-9]@[a-zA-Z0-9][-\.]{0,1}([a-zA-Z][-\.]{0,1})*[a-zA-Z0-9]\.[a-zA-Z0-9]{1,}([\.\-]{0,1}[a-zA-Z]){0,}[a-zA-Z0-9]{0,}$/i
+        );
+        return emailRegexp.test(email);
+    }
+ 
     async function handleSignup() {
         let validUser = true;
         if (!newUsername || String(newUsername).length > 18) {
@@ -60,13 +82,14 @@
         <div>
 
             <input
+                on:change={handleInput}
                 bind:value={newEmail}
                 type="email"
                 name="newEmail"
                 placeholder="Email"
-                autocomplete="off"
+                id="{inputTextColor}"
             />
-            <br />
+            <br/>
             <input
                 bind:value={newUsername}
                 type="text"
@@ -82,14 +105,22 @@
                 placeholder="Password"
                 autocomplete="new-password"
             />
-            <br />
-            <button on:click={handleSignup} type="submit">Signup</button>
+            <br/>
+            <button disabled="{disabledStatus}" on:click={handleSignup} type="submit">Signup</button>
         </div>
     </div>
 </div>
 
 
 <style>
+    #red {
+        color: #e20000;
+    }
+
+    #normal {
+        color: #000000;
+    }
+
     #account-wrapper {
         display: flex;
         justify-content: center;

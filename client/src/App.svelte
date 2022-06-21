@@ -1,7 +1,6 @@
 <script>
 	import { Link, Router, Route } from "svelte-navigator";
-	
-	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import { user } from "./stores/authStore.js";
 	import { baseURL } from "./stores/generalStore.js";
 	
@@ -15,7 +14,7 @@
 	import OverviewSurvey from "./pages/SurveyManager/OverviewSurvey.svelte";
 	import StatsSurvey from "./pages/SurveyManager/StatisticSurvey.svelte";
 	import PrivateRoute from "./routes/PrivateRoute.svelte";
-	const options = {};
+	const options = { initial: 0, next:0, onpop: () => {toast.pop(0)}, intro: { y: -64 } };
 
 	async function handleLogout() {
 		const response = await fetch($baseURL + '/logout');
@@ -72,6 +71,11 @@
 		
 	</Router>
 </main>
+<footer>
+	<div>©{new Date().getFullYear()}</div>
+	<div>gust0781@stud.kea.dk</div>
+	<div>ludv1428@stud.kea.dk</div>
+</footer>
 
 <style>
 	main {
@@ -79,6 +83,7 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+		min-height: calc(97vh - 3.7em);
 	}
 
 	nav {
@@ -100,11 +105,11 @@
 
 	:global(a):hover {
 		color: #89daff;
-		background-color: #5574b8;
+		background-color: #4268b9;
 		box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
 		-webkit-box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
 		-moz-box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
-		transition: 0.3s;
+		transition: 0.2s;
 		font-weight: bold;
 	}
 
@@ -112,5 +117,17 @@
 		main {
 			max-width: none;
 		}
+	}
+
+	footer {
+		height: 3em;
+		width: 100%;
+		display:flex;
+		justify-content: space-around;
+		background-color: #00268d;
+	}
+
+	footer div {
+		margin-top: 1em;
 	}
 </style>

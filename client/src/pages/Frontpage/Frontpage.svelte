@@ -7,4 +7,31 @@
 		<h1>Welcome {$user.currentUser.username}</h1>
 	{/if}
     <h1>Take - create - experience Surveys in a stellar new vision</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
+    <h1>Scroll</h1>
 </div>
