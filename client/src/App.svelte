@@ -13,15 +13,20 @@
 </script>
 
 
-
 <main>
 	<Router>
 		<nav>
 			<Link to="/">Home</Link>
 			<Link to="/about">About</Link>
 			<Link to="/surveys">Surveys(Guarded)</Link>
-			<Link to="/login">Login</Link>
-			<Link to="/signup">Signup</Link>
+			{#if condition}
+				<Link to="/login">Login</Link>
+				<Link to="/signup">Signup</Link>
+			{/if}
+			{#if condition}
+				<Link to="/">Logout</Link>
+			{/if}
+			
 		</nav>
 		<Route path="/" component={Frontpage} />
 		<Route path="/about" component={About} />
@@ -56,21 +61,27 @@
 		margin: 0 auto;
 	}
 	nav {
-		max-width: 960px;
 		margin: auto;
 		padding: 30px 0px;
-		background-color: bisque;
+		background-color: #00268d;
+		box-shadow: 0px 0px 19px 1px rgba(0,0,0,0.75);
+		-webkit-box-shadow: 0px 0px 19px 1px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 19px 1px rgba(0,0,0,0.75);
 	}
 	:global(a) {
 		padding: 30px;
 		text-transform: uppercase;
         text-decoration: none;
 		font-size: large;
-		color: white;;
+		color: #e7e7e7;
     }
 	:global(a):hover {
-		color: black;
-		background-color: beige;
+		color: #89daff;
+		background-color: #5574b8;
+		box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
+		-webkit-box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);
+		transition: 0.3s;
 	}
 
 	@media (min-width: 640px) {

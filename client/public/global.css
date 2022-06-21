@@ -5,7 +5,10 @@ html, body {
 }
 
 body {
-	color: #333;
+	background-color: #652e7a;
+	background-image:url("./images/night-sky.jpg");
+	background-size: cover;
+	color: #d6d6d6;
 	margin: 0;
 	padding: 4px;
 	box-sizing: border-box;
