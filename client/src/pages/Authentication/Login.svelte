@@ -12,7 +12,7 @@
     let attemptsRemaning;
 
     console.log($user);
-    
+     
 
     async function login() {
         if (attemptsRemaning === 0) {
@@ -39,12 +39,10 @@
         const result = await response.json();
         attemptsRemaning = result.attemptsLeft;
         if (result.loggedIn) {
-            console.log("ITS WORKING");
             user.set(result);
             const from = ($location.state && $location.state.from) || "/";
             navigate(from, { replace: true });
         } else {
-            console.log("Y U NO TOAST");
             toast.push("Invalid Username or Password, "+ result.attemptsLeft +" attempts left", {
                 theme: {
                     '--toastBackground': '#F56565',

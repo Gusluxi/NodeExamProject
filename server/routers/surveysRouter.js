@@ -4,7 +4,7 @@ import db from "../database/createConnection.js";
 
 
 //################# GET surveys ####################
-router.get("/api/surveys/users", async (req, res) => {
+router.get("/api/surveys", async (req, res) => {
     if (req.session.loggedIn) {
         const userid = req.session.userID;
         const surveys = await db.all(`SELECT * FROM surveys WHERE userid = ?;`, userid);
