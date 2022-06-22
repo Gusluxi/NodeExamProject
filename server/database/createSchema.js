@@ -29,6 +29,7 @@ await db.exec(`CREATE TABLE IF NOT EXISTS surveys (
 await db.exec(`CREATE TABLE IF NOT EXISTS questions (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     question VARCHAR(70) NOT NULL,
+    questiontype BIT NOT NULL,
     surveyid INTEGER NOT NULL,
     CONSTRAINT fk_surveys
     FOREIGN KEY(surveyid) REFERENCES surveys(id) ON DELETE CASCADE
@@ -37,6 +38,7 @@ await db.exec(`CREATE TABLE IF NOT EXISTS questions (
 await db.exec(`CREATE TABLE IF NOT EXISTS answers (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     answer VARCHAR(70) NOT NULL,
+    preset BIT NOT NULL,
     questionid INTEGER NOT NULL,
     CONSTRAINT fk_questions
     FOREIGN KEY(questionid) REFERENCES questions(id) ON DELETE CASCADE
@@ -46,7 +48,7 @@ await db.exec(`CREATE TABLE IF NOT EXISTS answers (
 if (isInDeleteMode) {
     db.run("INSERT INTO users (username, email, password) VALUES ('Ludvig', 'testmail@gmail.com', '$2b$12$zqex32UV1pHm4W8BMEqgX.rpSe7l55TbpTAVlo6zhNCaOoaYzVVsu')"); //Kodeord er hej1
     db.run("INSERT INTO surveys (title, userid) VALUES ('TestSurvey', '1')");
-    db.run("INSERT INTO questions (question, surveyid) VALUES ('Hvem er sej?', '1')");
-    db.run("INSERT INTO answers (answer, questionid) VALUES ('dig bro', '1')");
+    db.run("INSERT INTO questions (question, questiontype,  surveyid) VALUES ('Hvem er sej?', '1','1')");
+    db.run("INSERT INTO answers (answer, preset, questionid) VALUES ('dig bro', '0', '1')");
 }
 db.close();

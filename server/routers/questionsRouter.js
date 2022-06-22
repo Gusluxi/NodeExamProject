@@ -14,10 +14,10 @@ router.get("/api/questions/surveys/:id", async (req, res) => {
 router.post("/api/questions", async (req, res) => {
     if (req.session.loggedIn) {
         const userid = req.session.userID;
-        const { question, selectedSurveyId } = req.body;
+        const { question, questiontype, selectedSurveyId } = req.body;
         const correctSurveyId = await db.get(`SELECT id FROM surveys WHERE id = ? and userid = ?`, [selectedSurveyId, userid]);
         if (correctSurveyId) {
-            const { changes } = await db.run(`INSERT INTO questions (question, surveyid) VALUES (?, ?);`, [question, correctSurveyId.id]);
+            const { changes } = await db.run(`INSERT INTO questions (question, questiontype, surveyid) VALUES (?, ?, ?);`, [question, questiontype, correctSurveyId.id]);
             return res.send({ rowsAffected: changes });  
         }
         return res.send({ error: "wrong surveyid"});
@@ -32,12 +32,12 @@ router.patch("/api/questions/:id", async (req, res) => {
     if (req.session.loggedIn) {
         const userid = req.session.userID;
         const questionid = Number(req.params.id);
-        const { selectedSurveyId, question } = req.body;
+        const { selectedSurveyId, questiontype, question } = req.body;
         const correctSurveyId = await db.get(`SELECT id FROM surveys WHERE id = ? and userid = ?`, [selectedSurveyId, userid]);
         if (correctSurveyId) {
             const foundQuestion = await db.get(`SELECT * FROM questions where id = ?;`, questionid);
             if (foundQuestion) {
-                const { changes } = await db.run(`UPDATE questions SET question = ? WHERE id = ?;`, [question, questionid]);
+                const { changes } = await db.run(`UPDATE questions SET question = ?, questiontype = ? WHERE id = ?;`, [question, questiontype, questionid]);
             return res.send({ rowsAffected: changes });
             };
         }
