@@ -8,7 +8,8 @@ import { hashPassword, compareToDatabase } from "../password.js";
 //################# Validation email ####################
 router.post("/valid/email", async (req, res) => {
     const email = req.body;
-    if(await db.get(`SELECT email FROM users WHERE email = ?`, [email.email])) {
+    const dbEmail = await db.get(`SELECT email FROM users WHERE email = ?`, [email.email])
+    if(dbEmail) {
         req.session.emailExists = true;
     } else {
         req.session.emailExists = false;
@@ -20,7 +21,8 @@ router.post("/valid/email", async (req, res) => {
 //################# Validation Username ####################
 router.post("/valid/username", async (req, res) => {
     const username = req.body;
-    if (await db.get(`SELECT username FROM users WHERE username = ?`, [username.username])) {
+    const dbUsername = await db.get(`SELECT username FROM users WHERE username = ?`, [username.username]);
+    if (dbUsername) {
         req.session.usernameExists = true;
     } else {
         req.session.usernameExists = false;
@@ -32,11 +34,23 @@ router.post("/valid/username", async (req, res) => {
 //################# Signup ####################
 router.post("/auth/signup", async (req, res) => {
     const newUser = req.body;
+    console.log(newUser);
     if (newUser.email && newUser.username && newUser.password) { //If they all exists.
         if(req.session.usernameExists) {
             return res.send({ error: "Username already exists"})
+
         } else if (req.session.emailExists) {
             return res.send({ error: "Email already exists"})
+
+        } else if (String(newUser.email).length > 320 || String(newUser.email).length < 5) {
+            return res.send({ error: "Email has incorrect length"})
+
+        } else if (String(newUser.username).length > 18 || String(newUser.username).length < 2) {
+            return res.send({ error: "Username has incorrect length"})
+
+        } else if (String(newUser.password).length > 30 || String(newUser.password).length < 3) {
+            return res.send({ error: "Password has incorrect length"})
+
         }
      
         const hashedPassword = await hashPassword(newUser.password)

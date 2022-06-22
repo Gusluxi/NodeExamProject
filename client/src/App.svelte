@@ -87,6 +87,7 @@
 	}
 
 	nav {
+		max-width: 1300px;
 		margin: auto;
 		padding: 30px 0px;
 		background-color: #00268d;

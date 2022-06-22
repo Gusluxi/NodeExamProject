@@ -12,8 +12,13 @@ router.get("/api/answers/questions/:id/:preset", async (req, res) => {
         const surveyUser = await db.get(
             `SELECT * FROM surveys
             INNER JOIN questions ON questions.surveyid = surveys.id
+<<<<<<< HEAD
             INNER JOIN answers ON answers.questionid = questions.id WHERE questionid = ? AND preset = ?`, [questionid, preset]);
         if (surveyUser && surveyUser.userid === userid) {
+=======
+            INNER JOIN answers ON answers.questionid = questions.id WHERE questionid = ?`, questionid);
+        if (surveyUser.userid === userid) {
+>>>>>>> 5d1c75047d5e05e03f3455d7597106675f65483f
             const answers = await db.all(`SELECT * FROM answers WHERE questionid = ?;`, questionid);
             return res.send({ data: answers });
         }

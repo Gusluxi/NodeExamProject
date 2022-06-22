@@ -24,7 +24,7 @@
     function handleInput(event) {
         const emailValidation = isEmailValid(event.target.value);
         if(!emailValidation) {
-            showToast("Email is invalid");
+            showToast("Please enter a valid mail");
             inputTextColor = "red";
             disabledStatus = true;
         } else {
@@ -42,18 +42,63 @@
  
     async function handleSignup() {
         let validUser = true;
-        if (!newUsername || String(newUsername).length > 18) {
+        let toastMessage = "";
+        
+        if (!newEmail || String(newEmail).length > 320 || String(newEmail).length < 5) {
             validUser = false;
-            showToast("Please add a username between 0-18 char");
+            toastMessage += "Please add a shorter email. ";
+        };
+        if (!newUsername || String(newUsername).length > 18 || String(newUsername).length < 2) {
+            validUser = false;
+            toastMessage += "Please add a username between 2-18 char. ";
+        };
+        if (!newPassword || String(newPassword).length > 30 || String(newPassword).length < 3) {
+            validUser = false;
+            toastMessage += "Please add a password between 3-30 characters.";
+        };
+        
+        if (toastMessage) {
+            showToast(toastMessage);
+        };
+        //Check if email already exists.
+        if (validUser) {
+            const responseEmail = await fetch($baseURL + '/valid/email', {
+			    method: 'POST',
+                headers: {
+                    "content-type": "application/json",
+                    "Accept": "application/json"
+                },
+			    body: JSON.stringify({
+                    email: newEmail
+			    })
+		    });
+            const resultEmail = await responseEmail.json();
+            
+            if (resultEmail.emailExists) {
+                showToast("Email already Exists");
+                validUser = false;
+            }
         }
-        if (!newEmail || String(newEmail).length > 320) {
-            validUser = false;
-            showToast("Please add a valid email");
+        //Check if username already exists.
+        if (validUser) {
+            const responseUsername = await fetch($baseURL + '/valid/username', {
+			    method: 'POST',
+                headers: {
+                    "content-type": "application/json",
+                    "Accept": "application/json"
+                },
+			    body: JSON.stringify({
+				    username: newUsername
+			    })
+		    });
+            const resultUsername = await responseUsername.json();
+            
+            if (resultUsername.usernameExists) {
+                showToast("Username already Exists");
+                validUser = false;
+            }
         }
-        if (!newPassword || String(newPassword).length > 30) {
-            validUser = false;
-            showToast("Please add a valid password");
-        } 
+             
         if (validUser) {
             const response = await fetch($baseURL + '/auth/signup', {
 			method: 'POST',
@@ -62,12 +107,13 @@
                 "Accept": "application/json"
             },
 			body: JSON.stringify({
-				newUsername,
-                newEmail,
-                newPassword
+				username: newUsername,
+                email: newEmail,
+                password: newPassword
 			})
 		    });
             const result = await response.json();
+            console.log(result);
             if (result.rowsAffected > 0) {
                 toast.push("Account created!")
                 const from = ($location.state && $location.state.from) || "/login";
