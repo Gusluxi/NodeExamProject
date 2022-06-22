@@ -6,6 +6,10 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.resolve("../client/public")));
 app.use(express.urlencoded({extended: true}));
+//Redirects to "/" if refreshed. Developer useful. Delete for ready code.
+app.all('*', (req, res) => {
+	res.send('<script>window.location.replace("http://localhost:3000/")</script>')
+});
 
 //################# Helmet ####################
 import helmet from "helmet";
