@@ -12,9 +12,48 @@
         console.log(surveysArray);
         surveys = surveysArray;
     })
+
+    function handleLink() {
+
+    }
+
+    async function handleDelete(survey) {
+        const response = await fetch($baseURL + '/api/surveys/' + survey.id, {
+			    method: 'DELETE',
+                headers: {
+                    "content-type": "application/json",
+                    "Accept": "application/json"
+                }
+		    });
+            const result = await response.json();
+            if (response.status === 200) {
+                const surveyIndexNr = surveys.findIndex(singleSurvey => singleSurvey.id === survey.id);
+                surveys.splice(surveyIndexNr, 1); 
+                surveys = surveys;
+            }
+    }
+    
     
 
 </script>
 {#if surveys}
-    <h1>{surveys[0].title}</h1>
+    {#each surveys as survey (survey.id)}
+            <h1>{survey.title}</h1>
+            <Link to = "/surveys/stats" >
+                <button class="btn">Stats</button>
+            </Link> 
+            <Link to = "/surveys/edit">
+                <button class="btn">Edit</button>
+            </Link> 
+                <button class="btn" on:click="{handleLink}">Copy Link</button>
+                <button class="btn" on:click="{handleDelete(survey)}">Delete</button>
+    {/each}
 {/if}
+
+
+<style>
+    .btn {
+        font-size: 1rem;
+        margin: 0;
+    }
+</style>
