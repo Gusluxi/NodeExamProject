@@ -12,8 +12,8 @@ router.get("/api/answers/questions/:id/:preset", async (req, res) => {
         const surveyUser = await db.get(
             `SELECT * FROM surveys
             INNER JOIN questions ON questions.surveyid = surveys.id
-            INNER JOIN answers ON answers.questionid = questions.id WHERE questionid = ?`, questionid);
-        if (surveyUser.userid === userid) {
+            INNER JOIN answers ON answers.questionid = questions.id WHERE questionid = ? AND preset = ?`, [questionid, preset]);
+        if (surveyUser && surveyUser.userid === userid) {
             const answers = await db.all(`SELECT * FROM answers WHERE questionid = ?;`, questionid);
             return res.send({ data: answers });
         }
