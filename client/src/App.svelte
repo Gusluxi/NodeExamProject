@@ -57,11 +57,11 @@
 			<OverviewSurvey />
 		</PrivateRoute>
 		
-		<PrivateRoute path="/surveys/stats" let:location>
+		<PrivateRoute path="/surveys/stats/:id" let:location>
 			<StatsSurvey />
 		</PrivateRoute>
 		
-		<PrivateRoute path="/surveys/edit" let:location>
+		<PrivateRoute path="/surveys/edit/:id" let:location>
 			<EditSurvey />
 		</PrivateRoute>
 		

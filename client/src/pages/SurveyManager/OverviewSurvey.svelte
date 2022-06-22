@@ -39,10 +39,10 @@
 {#if surveys}
     {#each surveys as survey (survey.id)}
             <h1>{survey.title}</h1>
-            <Link to = "/surveys/stats" >
+            <Link to="/surveys/stats/{survey.id}" >
                 <button class="btn">Stats</button>
             </Link> 
-            <Link to = "/surveys/edit">
+            <Link to="/surveys/edit/{survey.id}">
                 <button class="btn">Edit</button>
             </Link> 
                 <button class="btn" on:click="{handleLink}">Copy Link</button>
