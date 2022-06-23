@@ -49,6 +49,7 @@
                 <button class="btn" on:click="{handleDelete(survey)}">Delete</button>
     {/each}
 {/if}
+<Link to="/newsurvey"><button>New Survey</button></Link>
 
 
 <style>
