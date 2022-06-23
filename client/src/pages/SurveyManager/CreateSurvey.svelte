@@ -1,5 +1,6 @@
 <script>
     import { baseURL } from "../../stores/generalStore.js";
+    import Question from "../../components/SurveyCreation/Question.svelte";
 	let title;
 	
 	async function newSurvey () {
@@ -17,6 +18,9 @@
 		const result = await response.json();
         console.log(result);
 	}
+
 </script>
+<h1>Create Survey</h1>
+<Question/>
 <input bind:value={title}>
 <button class="btn" on:click="{newSurvey}">New Survey</button>
