@@ -66,28 +66,44 @@ const sessionMiddleware = session({
 });
 app.use(sessionMiddleware);
 
+//################# Cors ####################
+import cors from "cors";
+app.use(cors());
+
+
 import http from "http";
 const server = http.createServer(app);
+/*  tester noget socket, skal måske bruges who knows
+import { Server } from 'socket.io';
 
-import { Server } from "socket.io";
+const io = new Server(server);
+
 const io = new Server(server, {
 	cors: {
 		origin: "http://localhost:8080"
 	}
 });
 
+io.on("connection", (socket) => {
+  console.log(socket.id)
+});
+*/
+
+
+
+import { Server } from "socket.io";
+const io = new Server(server);
+
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 io.use(wrap(sessionMiddleware));
 
-io.on('connection', (socket) => {
-	socket.on('chat message', msg => {
-	  io.emit('chat message', msg);
-	});
+io.on("connection", (socket) => {
+	console.log(socket.id);
+	socket.on("colorChanged", ({ data }) => {
+		io.emit("changeTheColor", { data});
+	})
   });
 
-//################# Cors ####################
-import cors from "cors";
-app.use(cors());
 
 //################# Routers ####################
 import usersRouter from "./routers/usersRouter.js";
