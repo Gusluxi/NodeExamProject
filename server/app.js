@@ -58,12 +58,32 @@ app.use("/valid", validationLimiter);
 
 //################# Sessions ####################
 import session from "express-session";
-app.use(session({
-    secret: 'GusLobf',
+const sessionMiddleware = session({
+	secret: 'GusLobf',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
-}));
+});
+app.use(sessionMiddleware);
+
+import http from "http";
+const server = http.createServer(app);
+
+import { Server } from "socket.io";
+const io = new Server(server, {
+	cors: {
+		origin: "http://localhost:8080"
+	}
+});
+
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+io.use(wrap(sessionMiddleware));
+
+io.on('connection', (socket) => {
+	socket.on('chat message', msg => {
+	  io.emit('chat message', msg);
+	});
+  });
 
 //################# Cors ####################
 import cors from "cors";

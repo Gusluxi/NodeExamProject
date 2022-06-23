@@ -29,7 +29,7 @@ await db.exec(`CREATE TABLE IF NOT EXISTS surveys (
 await db.exec(`CREATE TABLE IF NOT EXISTS questions (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     question VARCHAR(70) NOT NULL,
-    questiontype BIT NOT NULL,
+    questiontype INTEGER NOT NULL,
     surveyid INTEGER NOT NULL,
     CONSTRAINT fk_surveys
     FOREIGN KEY(surveyid) REFERENCES surveys(id) ON DELETE CASCADE
