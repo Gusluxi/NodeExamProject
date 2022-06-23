@@ -1,14 +1,17 @@
 <script>
-    let preAnswer;
+    export let preAnswer;
 </script>
-<input placeholder="Preset Answer" bind:value="{preAnswer}">
 <div class="checkbox-answer">
-    <h4>{preAnswer}</h4>
-    <input type="checkbox" disabled>
+    <input class="checkbox" type="checkbox" disabled>
+    <p>{preAnswer ? preAnswer : "Answer here"}</p>
 </div>
 
 <style>
     .checkbox-answer{
         display: flex;
+    }
+    .checkbox {
+        margin-top: 18px;
+        margin-right: 10px
     }
 </style>

@@ -17,8 +17,8 @@ router.post("/api/questions", async (req, res) => {
         const { question, questiontype, selectedSurveyId } = req.body;
         const correctSurveyId = await db.get(`SELECT id FROM surveys WHERE id = ? and userid = ?`, [selectedSurveyId, userid]);
         if (correctSurveyId) {
-            const { changes } = await db.run(`INSERT INTO questions (question, questiontype, surveyid) VALUES (?, ?, ?);`, [question, questiontype, correctSurveyId.id]);
-            return res.send({ rowsAffected: changes });  
+            const feedback = await db.run(`INSERT INTO questions (question, questiontype, surveyid) VALUES (?, ?, ?);`, [question, questiontype, correctSurveyId.id]);
+            return res.send({ rowsAffected: feedback.changes, postedId: feedback.lastID });  
         }
         return res.send({ error: "wrong surveyid"});
     }

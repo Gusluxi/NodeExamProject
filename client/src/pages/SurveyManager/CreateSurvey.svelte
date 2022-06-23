@@ -5,10 +5,11 @@ import { toast } from "@zerodevx/svelte-toast";
 	let title;
     let count = 0;
     let questionsArray = [];
+    let surveyPostedId = 0;
 
     function addQuestion() {
         count+= 1;
-        questionsArray.push([count]);
+        questionsArray.push(count);
         questionsArray = questionsArray
     }
 	
@@ -24,9 +25,17 @@ import { toast } from "@zerodevx/svelte-toast";
                     title
                 })
 		    });
-		    const result = await response.json();
+            const result = await response.json();
+            console.log(result);
+		    if (response.status === 200) {
+                surveyPostedId = result.postedId;
+            }
         } else {
-            toast.push
+            toast.push("Please add a title", {
+                theme: {
+                    '--toastBackground': '#F56565',
+                    '--toastBarBackground': '#C53030'
+            }});
         }
 	}
 
@@ -37,8 +46,8 @@ import { toast } from "@zerodevx/svelte-toast";
     <input bind:value={title} placeholder="Title">
     {#if questionsArray}
         {#each questionsArray as questionNumber}
-            <h1>{questionNumber}</h1>
-            <Question/> 
+            <h1>Question {questionNumber}.</h1>
+            <Question surveyId={surveyPostedId} questionNumber={questionNumber}/> 
         {/each}
     {/if}
 
@@ -51,5 +60,6 @@ import { toast } from "@zerodevx/svelte-toast";
     .question-wrapper {
         width: 40%;
         margin: auto;
+        text-align: left;
     }
 </style>

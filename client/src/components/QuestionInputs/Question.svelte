@@ -6,17 +6,69 @@
 	import RatingAnswer from "../AnswerInputs/RatingAnswer.svelte";
 	import TextAnswer from "../AnswerInputs/TextAnswer.svelte";
 
-	
+	export let surveyId;
+	let questionsPostedId = 0;
 	let selected;
 	let newQuestion;
 	let count = 0;
     let answersArray = [];
 
+
     function addAnswer() {
-        count+= 1;
-        answersArray.push([count]);
-        answersArray = answersArray
+        count += 1;
+        answersArray = answersArray.concat({surveyId: surveyId, answer: ""});
+        console.log(answersArray);
     }
+
+	async function saveQuestion() {
+		console.log("Saving question?");
+        const response = await fetch($baseURL + '/api/questions', {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                newQuestion,
+				surveyId
+            })
+		});
+        const result = await response.json();
+        console.log(result);
+		if (response.status === 200) {
+            questionsPostedId = result.postedId;
+			surveyId = 0;
+        }
+	}
+
+	async function saveAnswer() {
+        const response = await fetch($baseURL + '/api/answers/questions/'+questionsPostedId, {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+				answer: answersArray,
+                preset: false
+            })
+		});
+        const result = await response.json();
+        console.log(result);
+		if (response.status === 200) {
+            questionsPostedId = result.postedId;
+			surveyId = undefined;
+        }
+	}
+
+	if(surveyId > 0) {
+		console.log("Saving Question");
+		saveQuestion();
+	}
+	if(questionsPostedId > 0) {
+		console.log("Saving Answers");
+		saveAnswer();
+	}
 
 </script>
 <div class="question-n-type">
@@ -34,9 +86,9 @@
 </div>
 <div class="answer-box">
 	{#if newQuestion}
-		<h2>{newQuestion}</h2>
+		<p>{newQuestion}</p>
 	{:else}
-		<h2>Question</h2>
+		<p>"Your Question here"</p>
 	{/if}
 	
 	{#if selected && Number(selected) === 1}
@@ -48,21 +100,20 @@
 	{/if}
 	{#if selected && Number(selected) === 3}
 		{#each answersArray as answerNumber}
-			<h1>{answerNumber}</h1>
-			<CheckboxAnswer />
+			<input placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
+			<CheckboxAnswer preAnswer={answerNumber.answer} />
 		{/each}
-		<button>Add Answer</button>
+		<button on:click={addAnswer}>Add Answer</button>
 	{/if}
 	{#if selected && Number(selected) === 4}
 		{#each answersArray as answerNumber}
-			<h1>{answerNumber}</h1>
-			<RadioAnswers />
+			<input placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
+			<RadioAnswers preAnswer={answerNumber.answer} />
 		{/each}
-		<button>Add Answer</button>
+		<button on:click={addAnswer}>Add Answer</button>
 	{/if}
 	{#if selected && Number(selected) === 5}
 		<DateAnswer />
-		<button>Add Answer</button>
 	{/if}
 
 </div>
@@ -73,13 +124,8 @@
 	.question-n-type {
 		display: flex;
 		flex-direction: column;
-		margin: auto;
 	}
 	.question-select {
-		margin: auto;
 		width: 200px;
-	}
-	.text-area {
-		margin:auto;
 	}
 </style>
