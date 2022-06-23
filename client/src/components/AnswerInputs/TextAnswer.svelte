@@ -1,1 +1,1 @@
-<input type="text" disabled>
+<input type="text" placeholder="Answer will go here" disabled>
