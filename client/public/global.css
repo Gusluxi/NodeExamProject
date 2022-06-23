@@ -69,9 +69,14 @@ button:focus {
 	border-color: #666;
 }
 
-:root {
+.center {
 	--toastContainerTop: 8rem;
     --toastContainerRight: auto;
     --toastContainerBottom: auto;
     --toastContainerLeft: calc(50vw - 8rem);
 }
+.cookie {
+    --toastContainerRight: auto;
+    --toastContainerLeft: calc(50vw - 20rem);
+    --toastWidth: 40rem;
+  }

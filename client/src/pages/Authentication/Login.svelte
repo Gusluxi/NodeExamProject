@@ -40,6 +40,7 @@
         attemptsRemaning = result.attemptsLeft;
         if (result.loggedIn) {
             user.set(result);
+            localStorage.setItem('user',JSON.stringify(result))
             const from = ($location.state && $location.state.from) || "/";
             navigate(from, { replace: true });
         } else {

@@ -1,5 +1,5 @@
 <script>
-    import { baseURL } from "../../stores/generalStore.js";
+    import { baseURL } from "../stores/generalStore.js";
 	let title;
 	let result = null
 	

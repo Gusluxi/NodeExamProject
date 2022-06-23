@@ -1,9 +1,13 @@
 <script>
+	//Imports
 	import { Link, Router, Route } from "svelte-navigator";
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import { user } from "./stores/authStore.js";
 	import { baseURL } from "./stores/generalStore.js";
-	
+	import GdprBanner from '@beyonk/gdpr-cookie-consent-banner'
+	import '@beyonk/gdpr-cookie-consent-banner/dist/style.css' // import optional styles
+
+	//Pages
 	import About from "./pages/About/About.svelte";
 	import Login from './pages/Authentication/Login.svelte';
 	import Signup from './pages/Authentication/Signup.svelte';
@@ -14,7 +18,11 @@
 	import OverviewSurvey from "./pages/SurveyManager/OverviewSurvey.svelte";
 	import StatsSurvey from "./pages/SurveyManager/StatisticSurvey.svelte";
 	import PrivateRoute from "./routes/PrivateRoute.svelte";
+
+
 	const options = { initial: 0, next:0, onpop: () => {toast.pop(0)}, intro: { y: -64 } };
+	let toastClass = "center";
+	const cookieText = 'We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept Cookies", you consent to our use of cookies. Alternatively you can click "Cookie Settings" to adjust which cookies to accept'
 
 	async function handleLogout() {
 		const response = await fetch($baseURL + '/logout');
@@ -23,12 +31,17 @@
         
         if (result.loggedIn === false) {
             user.set(result.loggedIn)
+			localStorage.clear();
 			user.currentuser.set({})
         }
 	}
-
+	
 </script>
-<SvelteToast {options} />
+<GdprBanner cookieName="Stellar Cookie" description={cookieText}/>
+<div class="{toastClass}">
+	<SvelteToast {options} />
+</div>
+
 
 <main>
 	<Router>
@@ -120,6 +133,7 @@
 			max-width: none;
 		}
 	}
+	
 
 	footer {
 		height: 3em;
@@ -132,4 +146,6 @@
 	footer div {
 		margin-top: 1em;
 	}
+
+	
 </style>

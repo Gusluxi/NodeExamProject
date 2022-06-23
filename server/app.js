@@ -6,10 +6,6 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.resolve("../client/public")));
 app.use(express.urlencoded({extended: true}));
-//Redirects to "/" if refreshed. Developer useful. Delete for ready code.
-app.all('*', (req, res) => {
-	res.send('<script>window.location.replace("http://localhost:3000/")</script>')
-});
 
 //################# Helmet ####################
 import helmet from "helmet";
@@ -79,6 +75,11 @@ import surveysRouter from "./routers/surveysRouter.js";
 import answersRouter from "./routers/answersRouter.js";
 import questionsRouter from "./routers/questionsRouter.js";
 app.use(usersRouter, surveysRouter, answersRouter, questionsRouter);
+//Redirects to "/" if refreshed. Developer useful. Delete for ready code.
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve("../client/public/index.html"));
+});
+
 
 
 //################# Server ####################
