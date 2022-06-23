@@ -45,7 +45,7 @@
 
 <main>
 	<Router>
-		<nav>
+		<nav class="nav">
 			<Link to="/">Home</Link>
 			<Link to="/about">About</Link>
 			<Link to="/surveys/view">Surveys</Link>
@@ -110,7 +110,7 @@
 		-moz-box-shadow: 0px 0px 19px 1px rgba(0,0,0,0.75);
 	}
 
-	:global(a) {
+	.nav > :global(a) {
 		font-size: 1.7rem;
 		padding: 30px;
 		text-transform: uppercase;
@@ -118,7 +118,7 @@
 		color: #e7e7e7;
     }
 
-	:global(a):hover {
+	.nav > :global(a):hover {
 		color: #89daff;
 		background-color: #4268b9;
 		box-shadow: 0px 0px 19px -4px rgba(0,0,0,0.75);

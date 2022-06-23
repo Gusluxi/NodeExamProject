@@ -19,8 +19,11 @@ router.post("/api/surveys", async (req, res) => {
     if (req.session.loggedIn) {
         const userid = req.session.userID;
         const { title } = req.body;
-        const { changes } = await db.run(`INSERT INTO surveys (title, userid) VALUES (?, ?);`, [title, userid]);
-        return res.send({ rowsAffected: changes });
+        if (title) {
+            const { changes } = await db.run(`INSERT INTO surveys (title, userid) VALUES (?, ?);`, [title, userid]);
+            return res.send({ rowsAffected: changes })
+        }
+        return res.send({error: "No Title Provided"});
     }
     res.send({error: "Not logged in"});
 });
