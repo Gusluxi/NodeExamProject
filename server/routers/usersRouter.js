@@ -89,7 +89,7 @@ router.get("/logout", (req, res) => {
         req.session.userID = undefined;
         return res.send({ loggedIn: false})
     }
-    res.send({ error: "You are currently not logged in"})
+    res.send({ error: "You are currently not logged in", loggedIn: false})
 })
 
 
