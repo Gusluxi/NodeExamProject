@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { baseURL } from "../../stores/generalStore.js";
     import SurveyForm from "../SurveyForm/SurveyForm.svelte";
+    import { io } from "socket.io-client";
 
     const params = useParams()
     let questions;
@@ -10,7 +11,8 @@
     console.log($params);
     
     onMount(async () => {
-        const response = await fetch($baseURL + "/api/questions/surveys/" + $params.id)
+        socket.connect();
+        const response = await fetch($baseURL + "/api/questions/surveys/" + $params.id);
         const { data: questionsArray } = await response.json();
         console.log(questionsArray);
         questions = questionsArray;
@@ -25,39 +27,64 @@
     })
     console.log("Questions and answers:", questionAnswers);
 
+    const socket = io('ws:http://localhost:3000');
+    socket.on('answersocket', (x)=>{
+    console.log(x);
+    console.log("hej");
+    questionAnswers = x;
+    });
 
 </script>
 
 <h1>Statistics Survey</h1>
 
-
-    <div>
+    
+     <table>
         {#if questions}
-            {#each questions as question (question.id)}
-            <div class="single-survey-wrapper">
-                <h1>{question.question}</h1>
-            </div>
-            {/each}
-        {/if}
-    </div>
-
-    <table>
+        {#each questions as question }
         <thead>
             <tr>
-                <th>Question</th>
+                <th>{question.question}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>
-                    preset answer
-                </td>
-                <td>
-                    user answer
-                </td>
+                        <td>
+                            preset answer
+                        </td>
+                        <td>
+                            user answer
+                        </td>
             </tr>
         </tbody>
+        {/each}
+        {/if}
     </table>
+    
+
+    <!--
+    <table>
+        {#if questionAnswers}
+        {#each questionAnswers as questionAnswer }
+        <thead>
+            <tr>
+                <th>{questionAnswer.question}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                        <td>
+                            preset answer
+                        </td>
+                        <td>
+                            {questionAnswer.answer}
+                        </td>
+            </tr>
+        </tbody>
+        {/each}
+        {/if}
+    </table>
+    -->
 
     <style>
         table, tbody, thead, td, th{

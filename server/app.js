@@ -71,8 +71,7 @@ import cors from "cors";
 app.use(cors());
 
 
-import http from "http";
-const server = http.createServer(app);
+
 /*  tester noget socket, skal måske bruges who knows
 import { Server } from 'socket.io';
 
@@ -88,21 +87,31 @@ io.on("connection", (socket) => {
   console.log(socket.id)
 });
 */
+import http from "http";
+const server = http.createServer(app);
+
+// import { Server } from "socket.io";
+// const io = new Server(server);
+
+// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+// io.use(wrap(sessionMiddleware));
+
+// io.on("connection", (socket) => {
+// 	console.log(socket.id);
+// 	socket.on("event", function(data) {
+// 		const n = data.message;
+// 		io.sockets.emit("event", message);
+// 	})
+//   });
 
 
+  import {init, getIO} from './socket.js';
 
-import { Server } from "socket.io";
-const io = new Server(server);
+	const io = init(server)
 
-const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
-io.use(wrap(sessionMiddleware));
-
-io.on("connection", (socket) => {
-	console.log(socket.id);
-	socket.on("colorChanged", ({ data }) => {
-		io.emit("changeTheColor", { data});
-	})
-  });
+	io.on("connection", (socket) => {
+  		console.log(socket.id)
+	});
 
 
 //################# Routers ####################
@@ -120,6 +129,6 @@ app.get('*', (req, res) => {
 
 //################# Server ####################
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log("Starting server on port:", PORT);
 });
