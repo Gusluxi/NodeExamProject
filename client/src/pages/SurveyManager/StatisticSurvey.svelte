@@ -6,7 +6,6 @@
 
     const params = useParams()
     let questions;
-    let answers;
     let questionAnswers = [];
     console.log($params);
     
@@ -19,12 +18,12 @@
             console.log(question.id);
             const response = await fetch($baseURL + "/api/answers/questions/" + question.id)
             const { data: answersArray } = await response.json();
-            questionAnswers.push(answersArray);
+            questionAnswers.push({question: question, answers: answersArray ? answersArray : false});
             console.log(answersArray);
         })
         
     })
-    console.log(questionAnswers);
+    console.log("Questions and answers:", questionAnswers);
 
 
 </script>
@@ -45,18 +44,30 @@
     <table>
         <thead>
             <tr>
-                {#if questions}
-                    {#each questions as question (question.id)}
-                        <h1>{question.question}</h1>
-                    {/each}
-                    <th>
-                        {#if answers}
-                        {   #each answer as answer (answer.id)}
-                                <h1>{answer.answer}</h1>
-                            {/each}
-                        {/if}
-                    </th>
-                {/if}
+                <th>Question</th>
             </tr>
         </thead>
+        <tbody>
+            <tr>
+                <td>
+                    preset answer
+                </td>
+                <td>
+                    user answer
+                </td>
+            </tr>
+        </tbody>
     </table>
+
+    <style>
+        table, tbody, thead, td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+            background-color: #6767d7;
+        }
+        table {
+            width: 600px;
+            font-size: 1.2rem;
+            margin:auto;
+        }
+    </style>
