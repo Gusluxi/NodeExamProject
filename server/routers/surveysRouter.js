@@ -13,6 +13,17 @@ router.get("/api/surveys", async (req, res) => {
     res.send({error: "Not logged in"});
 });
 
+/* probably not useful
+router.get("/api/surveys", async (req, res) => {
+    if (req.session.loggedIn) {
+        const userid = req.session.userID;
+        const surveys = await db.all(`SELECT * FROM surveys WHERE userid = ? and id = ?;`, [userid, id]);
+        return res.send({ data: surveys });
+    } 
+    res.send({error: "Not logged in"});
+});
+*/
+
 
 //################# POST survey ####################
 router.post("/api/surveys", async (req, res) => {
