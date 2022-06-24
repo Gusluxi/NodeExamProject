@@ -33,24 +33,24 @@ router.post("/api/answers", async (req, res) => {
 //################# POST preset answer ####################
 router.post("/api/answers/questions/:id", async (req, res) => {
     if (req.session.loggedIn) {
-        const result = {};
         const userid = req.session.userID;
         const questionid = Number(req.params.id);
-        const { answer, preset } = req.body;
+        const { answers, preset } = req.body;
+        console.log( answers, preset);
         const surveyUser = await db.get(
             `SELECT * FROM surveys
             INNER JOIN questions ON questions.surveyid = surveys.id WHERE questions.id = ?`, questionid);
         if (surveyUser && surveyUser.userid === userid) {
             
-            if(answer.length > 1) {
-                answer.map(async singleObject => {
-                    await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [singleObject.answer, preset, questionid]);
+            if(Array.isArray(answers)) {
+                answers.map(async answer => {
+                    await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [answer.answer, preset, questionid]);
                 });
+                return res.send({success: "answers saved"})
             } else {
                 const { changes } = await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [answer, preset, questionid]);
                 return res.send({ rowsAffected: changes });
             }
-            return res.send({success: success})
         }
         return res.send({error: "wrong user"});
     }

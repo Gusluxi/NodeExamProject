@@ -14,10 +14,10 @@ router.get("/api/questions/surveys/:id", async (req, res) => {
 router.post("/api/questions", async (req, res) => {
     if (req.session.loggedIn) {
         const userid = req.session.userID;
-        const { question, questiontype, selectedSurveyId } = req.body;
-        const correctSurveyId = await db.get(`SELECT id FROM surveys WHERE id = ? and userid = ?`, [selectedSurveyId, userid]);
+        const { question, questionType, surveyId} = req.body;
+        const correctSurveyId = await db.get(`SELECT id FROM surveys WHERE id = ? and userid = ?`, [surveyId, userid]);
         if (correctSurveyId) {
-            const feedback = await db.run(`INSERT INTO questions (question, questiontype, surveyid) VALUES (?, ?, ?);`, [question, questiontype, correctSurveyId.id]);
+            const feedback = await db.run(`INSERT INTO questions (question, questiontype, surveyid) VALUES (?, ?, ?);`, [question, questionType, correctSurveyId.id]);
             return res.send({ rowsAffected: feedback.changes, postedId: feedback.lastID });  
         }
         return res.send({ error: "wrong surveyid"});
