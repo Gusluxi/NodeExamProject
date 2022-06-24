@@ -16,7 +16,7 @@ router.post("/api/questions", async (req, res) => {
         const userid = req.session.userID;
         const { question, questionType, surveyId} = req.body;
         const correctSurveyId = await db.get(`SELECT id FROM surveys WHERE id = ? and userid = ?`, [surveyId, userid]);
-        if (correctSurveyId) {
+        if (correctSurveyId && question && questionType) {
             const feedback = await db.run(`INSERT INTO questions (question, questiontype, surveyid) VALUES (?, ?, ?);`, [question, questionType, correctSurveyId.id]);
             return res.send({ rowsAffected: feedback.changes, postedId: feedback.lastID });  
         }

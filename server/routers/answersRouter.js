@@ -36,7 +36,6 @@ router.post("/api/answers/questions/:id", async (req, res) => {
         const userid = req.session.userID;
         const questionid = Number(req.params.id);
         const { answers, preset } = req.body;
-        console.log( answers, preset);
         const surveyUser = await db.get(
             `SELECT * FROM surveys
             INNER JOIN questions ON questions.surveyid = surveys.id WHERE questions.id = ?`, questionid);
