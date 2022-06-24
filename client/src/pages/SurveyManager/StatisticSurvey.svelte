@@ -35,56 +35,34 @@
     });
 
 </script>
-
-<h1>Statistics Survey</h1>
-
-    
-     <table>
-        {#if questions}
-        {#each questions as question }
-        <thead>
-            <tr>
-                <th>{question.question}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
+    {#if questionAnswers}
+        <h1>Statistics Survey</h1>
+        {#if condition}
+            
+        {/if}
+        {#each questionAnswers as questionAnswer}
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">{questionAnswer.question.question}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
                         <td>
                             preset answer
                         </td>
                         <td>
                             user answer
                         </td>
-            </tr>
-        </tbody>
+                    </tr>
+                </tbody>
+            </table>
         {/each}
-        {/if}
-    </table>
+    {:else}
+        <h2>This survey has no questions and no answers</h2>
+    {/if}
     
-
-    <!--
-    <table>
-        {#if questionAnswers}
-        {#each questionAnswers as questionAnswer }
-        <thead>
-            <tr>
-                <th>{questionAnswer.question}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                        <td>
-                            preset answer
-                        </td>
-                        <td>
-                            {questionAnswer.answer}
-                        </td>
-            </tr>
-        </tbody>
-        {/each}
-        {/if}
-    </table>
-    -->
 
     <style>
         table, tbody, thead, td, th{
