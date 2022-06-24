@@ -1,22 +1,23 @@
 <script>
-    import { baseURL } from "../../stores/generalStore.js";
+    import { surveyId, baseURL } from "../../stores/generalStore.js";
 	import CheckboxAnswer from "../AnswerInputs/CheckboxAnswer.svelte";
 	import DateAnswer from "../AnswerInputs/DateAnswer.svelte";
 	import RadioAnswers from "../AnswerInputs/RadioAnswers.svelte";
 	import RatingAnswer from "../AnswerInputs/RatingAnswer.svelte";
 	import TextAnswer from "../AnswerInputs/TextAnswer.svelte";
 
-	export let surveyId;
-	let questionsPostedId = 0;
+	let questionsPostedId;
 	let selected;
 	let newQuestion;
 	let count = 0;
     let answersArray = [];
+	$: $surveyId, saveQuestion();
 
+	addAnswer();
 
     function addAnswer() {
         count += 1;
-        answersArray = answersArray.concat({surveyId: surveyId, answer: ""});
+        answersArray = answersArray.concat({ answer: ""});
         console.log(answersArray);
     }
 
@@ -29,48 +30,43 @@
                 "Accept": "application/json"
             },
             body: JSON.stringify({
-                newQuestion,
-				surveyId
+                question: newQuestion,
+				questionType: Number(selected),
+				surveyId: $surveyId
             })
 		});
         const result = await response.json();
         console.log(result);
 		if (response.status === 200) {
             questionsPostedId = result.postedId;
-			surveyId = 0;
+			saveAnswer()
         }
 	}
 
 	async function saveAnswer() {
-        const response = await fetch($baseURL + '/api/answers/questions/'+questionsPostedId, {
-            method: 'POST',
-            headers: {
-                "content-type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-				answer: answersArray,
-                preset: false
-            })
-		});
-        const result = await response.json();
-        console.log(result);
-		if (response.status === 200) {
-            questionsPostedId = result.postedId;
-			surveyId = undefined;
-        }
+		if(answersArray.length > 0) {
+			const response = await fetch($baseURL + '/api/answers/questions/'+questionsPostedId, {
+				method: 'POST',
+				headers: {
+					"content-type": "application/json",
+					"Accept": "application/json"
+				},
+				body: JSON.stringify({
+					surveyId: $surveyId,
+					answers: answersArray,
+					preset: true
+				})
+			});
+			const result = await response.json();
+			console.log(result);
+			if (response.status === 200) {
+				questionsPostedId = 0;
+			}
+		}
+        
 	}
-
-	if(surveyId > 0) {
-		console.log("Saving Question");
-		saveQuestion();
-	}
-	if(questionsPostedId > 0) {
-		console.log("Saving Answers");
-		saveAnswer();
-	}
-
 </script>
+
 <div class="question-n-type">
 	<h3>Select Question type</h3>
 	<select class="question-select" bind:value={selected} name="question-type" id="question-type">
@@ -96,7 +92,7 @@
 		<TextAnswer />
 	{/if}
 	{#if selected && Number(selected) === 2}
-		<RatingAnswer />
+		<RatingAnswer min=1 max=5/>
 	{/if}
 	{#if selected && Number(selected) === 3}
 		{#each answersArray as answerNumber}

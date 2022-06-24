@@ -1,11 +1,15 @@
 <script>
-    import { baseURL } from "../../stores/generalStore.js";
+    import { surveyId, baseURL } from "../../stores/generalStore.js";
+    import { useNavigate, useLocation } from "svelte-navigator";
     import Question from "../../components/QuestionInputs/Question.svelte";
-import { toast } from "@zerodevx/svelte-toast";
+    import { toast } from "@zerodevx/svelte-toast";
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
 	let title;
     let count = 0;
     let questionsArray = [];
-    let surveyPostedId = 0;
 
     function addQuestion() {
         count+= 1;
@@ -28,7 +32,9 @@ import { toast } from "@zerodevx/svelte-toast";
             const result = await response.json();
             console.log(result);
 		    if (response.status === 200) {
-                surveyPostedId = result.postedId;
+                surveyId.set(result.postedId);
+                const from = ($location.state && $location.state.from) || "/";
+                navigate(from, { replace: true });
             }
         } else {
             toast.push("Please add a title", {
@@ -47,7 +53,7 @@ import { toast } from "@zerodevx/svelte-toast";
     {#if questionsArray}
         {#each questionsArray as questionNumber}
             <h1>Question {questionNumber}.</h1>
-            <Question surveyId={surveyPostedId} questionNumber={questionNumber}/> 
+            <Question /> 
         {/each}
     {/if}
 
