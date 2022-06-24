@@ -26,6 +26,11 @@
         
     })
     console.log("Questions and answers:", questionAnswers);
+    console.log(questionAnswers);
+    questionAnswers.forEach( element => {
+    console.log("lol",element.question)
+    })
+
 
     // const socket = io('ws:http://localhost:3000');
     // socket.on('answersocket', (x)=>{
@@ -33,29 +38,35 @@
     // console.log("hej");
     // questionAnswers = x;
     // });
-
+    
 </script>
     {#if questionAnswers}
         <h1>Statistics Survey</h1>
-        {#each questionAnswers as questionAnswer}
             <table>
+                
                 <thead>
+                   
                     <tr>
+                        {#each questionAnswers as questionAnswer}
                         <th colspan="2">{questionAnswer.question.question}</th>
+                        {/each}
                     </tr>
+                    
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            preset answer
+                    
+                        {#each questionAnswers as questionAnswer}
+                        <td colspan="2"> 
+                            {questionAnswer.answers.answer}   
                         </td>
-                        <td>
+                         <td>
                             user answer
                         </td>
-                    </tr>
+                        {/each}
+                    
                 </tbody>
             </table>
-        {/each}
+        
     {:else}
         <h2>This survey has no questions and no answers</h2>
     {/if}
