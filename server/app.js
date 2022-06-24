@@ -105,13 +105,13 @@ const server = http.createServer(app);
 //   });
 
 
-  import {init, getIO} from './socket.js';
+//   import {init, getIO} from './socket.js';
 
-	const io = init(server)
+// 	const io = init(server)
 
-	io.on("connection", (socket) => {
-  		console.log(socket.id)
-	});
+// 	io.on("connection", (socket) => {
+//   		console.log(socket.id)
+// 	});
 
 
 //################# Routers ####################

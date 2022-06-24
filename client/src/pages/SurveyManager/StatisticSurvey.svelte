@@ -11,7 +11,7 @@
     console.log($params);
     
     onMount(async () => {
-        socket.connect();
+        // socket.connect();
         const response = await fetch($baseURL + "/api/questions/surveys/" + $params.id);
         const { data: questionsArray } = await response.json();
         console.log(questionsArray);
@@ -27,19 +27,16 @@
     })
     console.log("Questions and answers:", questionAnswers);
 
-    const socket = io('ws:http://localhost:3000');
-    socket.on('answersocket', (x)=>{
-    console.log(x);
-    console.log("hej");
-    questionAnswers = x;
-    });
+    // const socket = io('ws:http://localhost:3000');
+    // socket.on('answersocket', (x)=>{
+    // console.log(x);
+    // console.log("hej");
+    // questionAnswers = x;
+    // });
 
 </script>
     {#if questionAnswers}
         <h1>Statistics Survey</h1>
-        {#if condition}
-            
-        {/if}
         {#each questionAnswers as questionAnswer}
             <table>
                 <thead>

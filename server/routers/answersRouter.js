@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import db from "../database/createConnection.js";
-import { getIO } from "../socket.js"
+// import { getIO } from "../socket.js"
 
 
 //################# GET answers ####################
@@ -15,8 +15,8 @@ router.get("/api/answers/questions/:id", async (req, res) => {
             INNER JOIN answers ON answers.questionid = questions.id WHERE questionid = ?`, questionid);
         if (surveyUser && surveyUser.userid === userid) {
             const answers = await db.all(`SELECT * FROM answers WHERE questionid = ?;`, questionid);
-            const io = getIO();
-            io.emit("answersocket")
+            // const io = getIO();
+            // io.emit("answersocket")
             return res.send({ data: answers });
         }
         return res.send({error: "wrong user"});
