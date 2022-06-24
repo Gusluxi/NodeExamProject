@@ -4,7 +4,7 @@ import db from "../database/createConnection.js";
 
 
 //################# GET answers ####################
-router.get("/api/answers/questions/:id/:preset", async (req, res) => {
+router.get("/api/answers/questions/:id", async (req, res) => {
     if (req.session.loggedIn) {
         const userid = req.session.userID;
         const questionid = Number(req.params.id);
