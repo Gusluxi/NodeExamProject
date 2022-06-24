@@ -27,37 +27,34 @@
 
 
 </script>
-
-<h1>Statistics Survey</h1>
-
-
-    <div>
-        {#if questions}
-            {#each questions as question (question.id)}
-            <div class="single-survey-wrapper">
-                <h1>{question.question}</h1>
-            </div>
-            {/each}
+    {#if questionAnswers}
+        <h1>Statistics Survey</h1>
+        {#if condition}
+            
         {/if}
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Question</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    preset answer
-                </td>
-                <td>
-                    user answer
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        {#each questionAnswers as questionAnswer}
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">{questionAnswer.question.question}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            preset answer
+                        </td>
+                        <td>
+                            user answer
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {/each}
+    {:else}
+        <h2>This survey has no questions and no answers</h2>
+    {/if}
+    
 
     <style>
         table, tbody, thead, td, th{
