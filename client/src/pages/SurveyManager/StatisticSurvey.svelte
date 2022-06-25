@@ -2,41 +2,45 @@
     import { Link, useParams } from  "svelte-navigator";
     import { onMount } from "svelte";
     import { baseURL } from "../../stores/generalStore.js";
-    import SurveyForm from "../SurveyForm/SurveyForm.svelte";
-    //import { io } from "socket.io-client";
+    import { toast } from "@zerodevx/svelte-toast";
+    import { io } from "socket.io-client";
 
     const params = useParams()
     let questions;
     let questionAnswers = [];
-    console.log($params);
     
     onMount(async () => {
-        // socket.connect();
+        socket.connect();
         const response = await fetch($baseURL + "/api/questions/surveys/" + $params.id);
         const { data: questionsArray } = await response.json();
         questions = questionsArray;
         await questions.map(async question => {
-            console.log("Question ID",question.id);
             const response = await fetch($baseURL + "/api/answers/questions/" + question.id)
             const { data: answersArray } = await response.json();
             
             questionAnswers = questionAnswers.concat({question: question, answers: answersArray ? answersArray : false});
-            console.log("Questions and answers:", questionAnswers);
             questionAnswers.sort(function(a, b) { 
                 return a.question.id - b.question.id  ||  a.name.localeCompare(b.name);
             });
         })
     })
-  
-  
-
-
-    // const socket = io('ws:http://localhost:3000');
-    // socket.on('answersocket', (x)=>{
-    // console.log(x);
-    // console.log("hej");
-    // questionAnswers = x;
-    // });
+    
+    const socket = io();
+    socket.on('postAnswers', ({ answers })=>{
+        console.log(answers);
+        questionAnswers.map(questionAnswer => {
+            answers.map(answer => {
+                if(answer.questions.id === questionAnswer.question.id) {
+                    questionAnswer.answers.push({ answer: answer.newAnswer, preset: 0, questionid: answer.questions.id})
+                }
+            })
+        })
+        questionAnswers = questionAnswers;
+        toast.push("New answers!", {
+                    theme: {
+                        '--toastBackground': '#58b225'
+                }});
+    });
     
 </script>
     

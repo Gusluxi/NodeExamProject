@@ -31,7 +31,9 @@
         if (result.loggedIn === false) {
             user.set(result.loggedIn)
 			localStorage.clear();
-			user.currentuser.set({})
+			if($user.currentuset) {
+				user.currentuser.set({})
+			}
         }
 	}
 

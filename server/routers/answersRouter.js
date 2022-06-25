@@ -1,7 +1,9 @@
- import { Router } from "express";
+import { Router } from "express";
+import { ieNoOpen } from "helmet";
 const router = Router();
 import db from "../database/createConnection.js";
-// import { getIO } from "../socket.js"
+import { getIO } from "../socket.js"
+
 
 
 //################# GET answers ####################
@@ -40,6 +42,9 @@ router.post("/api/answers", async (req, res) => {
             answers.map(async answer => {
                 await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [answer.newAnswer, false, answer.questions.id]);
             });
+            const io = getIO();
+            io.emit("postAnswers", { answers });
+
             return res.send({ data: "Successfully saved answers" })
         } else {
             await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [answers.newAnswer, false, answers.questions.id]);

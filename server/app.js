@@ -70,23 +70,7 @@ app.use(sessionMiddleware);
 import cors from "cors";
 app.use(cors());
 
-
-
-/*  tester noget socket, skal måske bruges who knows
-import { Server } from 'socket.io';
-
-const io = new Server(server);
-
-const io = new Server(server, {
-	cors: {
-		origin: "http://localhost:8080"
-	}
-});
-
-io.on("connection", (socket) => {
-  console.log(socket.id)
-});
-*/
+//################# Sockets ####################
 import http from "http";
 const server = http.createServer(app);
 
@@ -103,15 +87,13 @@ const server = http.createServer(app);
 // 		io.sockets.emit("event", message);
 // 	})
 //   });
+ 
 
-
-//   import {init, getIO} from './socket.js';
-
-// 	const io = init(server)
-
-// 	io.on("connection", (socket) => {
-//   		console.log(socket.id)
-// 	});
+	import {init} from './socket.js';
+ 	const io = init(server)
+ 	io.on("connection", (socket) => {
+   		console.log(socket.id)
+ 	});
 
 
 //################# Routers ####################
