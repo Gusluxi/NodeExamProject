@@ -7,9 +7,10 @@ export function init(server) {
     io = new Server(server);
     return io;
 }
+
 export function getIO() {
     if (!io) {
-        throw new Error("Can't get io instance before calling .init()");
+        throw new Error("Error in getting io instance before calling .init()");
     }
     return io;
 }
