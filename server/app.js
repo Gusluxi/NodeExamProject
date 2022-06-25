@@ -74,26 +74,11 @@ app.use(cors());
 import http from "http";
 const server = http.createServer(app);
 
-// import { Server } from "socket.io";
-// const io = new Server(server);
-
-// const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
-// io.use(wrap(sessionMiddleware));
-
-// io.on("connection", (socket) => {
-// 	console.log(socket.id);
-// 	socket.on("event", function(data) {
-// 		const n = data.message;
-// 		io.sockets.emit("event", message);
-// 	})
-//   });
- 
-
-	import {init} from './socket.js';
- 	const io = init(server)
- 	io.on("connection", (socket) => {
-   		console.log(socket.id)
- 	});
+import {init} from './socketIO.js';
+const io = init(server)
+io.on("connection", (socket) => {
+   	console.log("starting socket connection with id", socket.id)
+});
 
 
 //################# Routers ####################

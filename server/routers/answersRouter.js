@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ieNoOpen } from "helmet";
 const router = Router();
 import db from "../database/createConnection.js";
-import { getIO } from "../socket.js"
+import { getIO } from "../socketIO.js"
 
 
 
