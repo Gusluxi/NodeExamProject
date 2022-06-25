@@ -11,7 +11,15 @@
         const { data: surveysArray } = await response.json();
         console.log("Surveys",surveysArray);
         surveys = surveysArray;
+
+        //checks if logged in
+        const responseInfo = await fetch($baseURL + "/info/session/login")
+		const { loggedIn } = await responseInfo.json();
+		if(loggedIn === false) {
+			localStorage.clear();
+		}
     })
+
 
     async function handleDelete(survey) {
         const response = await fetch($baseURL + '/api/surveys/' + survey.id, {

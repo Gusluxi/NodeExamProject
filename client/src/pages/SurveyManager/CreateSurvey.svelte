@@ -6,10 +6,13 @@
 
     const navigate = useNavigate();
     const location = useLocation();
+    const maxQuestions = 30;
 
 	let title;
     let count = 0;
     let questionsArray = [];
+
+    addQuestion()
 
     function addQuestion() {
         count+= 1;
@@ -62,22 +65,53 @@
     <h1>Create Survey</h1>
     Survey Title:
     <input bind:value={title} placeholder="Title">
-    {#if questionsArray}
-        {#each questionsArray as questionNumber}
-            <h1>Question {questionNumber}.</h1>
-            <Question /> 
-            <button on:click="{removeQuestion}">Remove Question</button>
-        {/each}
-    {/if}
-
-    <button on:click="{addQuestion}">Add New Question</button>
+   
+        {#if questionsArray}
+            <div class="question-div">
+            {#each questionsArray as questionNumber}
+                <h1 class="question-header">Question {questionNumber}.</h1>
+                <Question /> 
+                {#if (count > 1)}
+                    <button class="remove-question" on:click="{removeQuestion}">Remove Question</button>
+                {/if}
+            {/each}
+            </div>
+            {#if (count < maxQuestions)}
+                    <button on:click="{addQuestion}">Add New Question</button>
+            {/if}
+        {/if}
+    
+    
+    
+    
     <button class="btn" on:click="{newSurvey}">Complete Survey</button>
 </div>
 
 <style>
     .question-wrapper {
-        width: 40%;
+        width: 50%;
         margin: auto;
         text-align: left;
+        padding: 20px;
     }
+
+    .question-div {
+        border: 5px solid #234ec4;
+        padding: 40px;
+        margin: 20px 0 20px 0;
+        
+    }
+
+    .question-header {
+        color: #cef6ff
+    }
+
+    .remove-question {
+        color: #6f0000;
+        position: right;
+    }
+    input, button {
+        font-weight: bold;
+    }
+
 </style>

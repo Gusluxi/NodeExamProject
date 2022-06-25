@@ -7,6 +7,7 @@
 	import RatingAnswer from "../AnswerInputs/RatingAnswer.svelte";
 	import TextAnswer from "../AnswerInputs/TextAnswer.svelte";
 
+	const maxAnswers = 10;
 	let questionsPostedId;
 	let selected;
 	let newQuestion;
@@ -19,9 +20,13 @@
 	function checkSubmit(newAnswer) {
 		if(newQuestion) {
 			submittable.set(true);
+		} else {
+			submittable.set(false);
 		}
 		if(newAnswer) {
 			submittable.set(true);
+		} else {
+			submittable.set(false);
 		}
 	}
 
@@ -75,7 +80,6 @@
 					preset: true
 				})
 			});
-			const result = await response.json();
 			if (response.status === 200) {
 				questionsPostedId = 0;
 				submittable.set(false);
@@ -118,7 +122,9 @@
 			<input on:change={checkSubmit(answerNumber.answer)} placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
 			<CheckboxAnswer preAnswer={answerNumber.answer} />
 		{/each}
-		<button on:click={addAnswer}>Add Answer</button>
+		{#if (count < maxAnswers)}
+			<button on:click={addAnswer}>Add Answer</button>
+		{/if}
 		{#if answersArray.length > 0}
 			<button on:click={removeAnswer}>Remove Answer</button>
 		{/if}
@@ -128,7 +134,9 @@
 			<input on:change={checkSubmit(answerNumber.answer)} placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
 			<RadioAnswers preAnswer={answerNumber.answer} />
 		{/each}
-		<button on:click={addAnswer}>Add Answer</button>
+		{#if (count < maxAnswers)}
+			<button on:click={addAnswer}>Add Answer</button>
+		{/if}
 		{#if answersArray.length > 0}
 			<button on:click={removeAnswer}>Remove Answer</button>
 		{/if}
@@ -153,4 +161,8 @@
 	.question-select {
 		width: 200px;
 	}
+
+	input, textarea, button {
+        font-weight: bold;
+    }
 </style>

@@ -81,10 +81,11 @@
 
 
 <div class="question-box">
+    <div class="questions-div">
     {#each questionPreAnswers as qna}
-        <h2>{qna.questions.question}</h2>
+        <h3 class="question-header">{qna.questions.question}</h3>
         {#if qna.questions.questiontype === 1}
-            <input type="text" bind:value={qna.newAnswer}>
+            <textarea class="text-area" bind:value="{qna.newAnswer}" placeholder='"Write your answer here..."' cols="50" rows="4" maxlength="200"></textarea>
         {/if}
 
         {#if qna.questions.questiontype === 2}
@@ -94,14 +95,18 @@
         {#if qna.questions.questiontype === 3}
             {#if qna.answers.length > 0 || qna.answers !== false}
                 <div class=preanswer-wrapper>
-                    {#each qna.answers as preanswer, i}
-                        <div>
-                            <input 
-                            type="checkbox" 
-                            on:change={e => {if(e.target.checked) {qna.newAnswer.push(preanswer.answer)} else {qna.newAnswer = qna.newAnswer.filter(answer => answer !== preanswer.answer.toString())}}} 
-                            name={qna.questions.id}
-                            bind:value={preanswer.answer}>
-                            {(i + 1) + preanswer.answer}
+                    {#each qna.answers as preanswer}
+                        <div class="preanswer-wrapper">
+                            <label for={preanswer.id} class="preanswer">
+                                <input 
+                                id="{preanswer.id}"
+                                class="checkbox-radio-input"
+                                type="checkbox" 
+                                on:change={e => {if(e.target.checked) {qna.newAnswer.push(preanswer.answer)} else {qna.newAnswer = qna.newAnswer.filter(answer => answer !== preanswer.answer.toString())}}} 
+                                name={qna.questions.id}
+                                bind:value={preanswer.answer}>
+                                {  preanswer.answer}
+                            </label>
                         </div>
                     {:else}
                         Loading answers...
@@ -114,9 +119,11 @@
             {#if qna.answers !== false || qna.answers.length !== 0}
                 <div class="preanswer-wrapper">
                     {#each qna.answers as preanswer}
-                        <div>
-                            <input type="radio" on:change={() => {qna.newAnswer = preanswer.answer}} name={qna.questions.id} bind:value={preanswer.answer}>
-                            {preanswer.answer}
+                        <div class="preanswer-wrapper">
+                            <label for="{preanswer.id}" class="preanswer">
+                                <input id="{preanswer.id}" class="checkbox-radio-input" type="radio" on:change={() => {qna.newAnswer = preanswer.answer}} name={qna.questions.id} bind:value={preanswer.answer}>
+                                {preanswer.answer}
+                            </label>
                         </div>
                         
                     {:else}
@@ -136,12 +143,27 @@
     {:else}
         <p>Loading Questions...</p>
     {/each}
-    <button on:click={submitAnswers}>Submit Form</button>
+    </div>
+    <button class="submit-btn" on:click={submitAnswers}>Submit Form</button>
 	
 
 </div>
 
 <style>
+    .preanswer-wrapper input[type="radio"] input[type="checkbox"] {
+        display: none;
+    }
+
+    .preanswer-wrapper label {
+        display:inline-block;
+        font-size: 1rem;
+    }
+
+
+    .question-header {
+        margin-top:40px;
+    }
+
     .preanswer-wrapper {
         display: flex;
         flex-direction: column;;
@@ -152,4 +174,15 @@
         margin: auto;
         text-align: left;
     }
+
+    .submit-btn {
+        color: #100079;
+    }
+
+    input, textarea, button {
+        font-weight: bold;
+    }
+    
+
+    
 </style>
