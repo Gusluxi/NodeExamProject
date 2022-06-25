@@ -6,6 +6,7 @@
     
     const params = useParams();
     const navigate = useNavigate();
+    let filledInputs;
     let questions;
     let questionPreAnswers = [];
     let surveyId = $params.id;
@@ -36,16 +37,18 @@
     })
 
     async function submitAnswers() {
-        let filledInputs = true;
+        filledInputs = true;
         questionPreAnswers.map(qna => {
             if (qna.newAnswer === "" || qna.newAnswer.length === 0) {
                 filledInputs = false;
             }
-            if(Array.isArray(qna.newAnswer)) {
-                qna.newAnswer = qna.newAnswer.toString();
-            }
         })
         if (filledInputs) {
+            questionPreAnswers.map(qna => {
+                if(Array.isArray(qna.newAnswer)) {
+                    qna.newAnswer = qna.newAnswer.toString();
+                }
+            })
             
             const response = await fetch($baseURL + '/api/answers', {
                 method: 'POST',
