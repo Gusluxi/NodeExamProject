@@ -56,7 +56,6 @@
 			{#if ($user.loggedIn)}
 				<Link on:click="{handleLogout}" to="/">Logout</Link>
 			{/if}
-			
 		</nav>
 		
 		
@@ -64,7 +63,7 @@
 		<Route path="/about" component={About} />
 		<Route path="/login" component={Login} />
 		<Route path="/signup" component={Signup} />
-		<Route path="/takeSurvey/*" component={SurveyForm} />
+		<Route path="/takeSurvey/:id" component={SurveyForm} />
 
 		<PrivateRoute path="/surveys/view" let:location>
 			<OverviewSurvey />

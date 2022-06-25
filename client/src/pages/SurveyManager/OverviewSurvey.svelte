@@ -9,13 +9,9 @@
     onMount(async () => {
         const response = await fetch($baseURL + "/api/surveys");
         const { data: surveysArray } = await response.json();
-        console.log(surveysArray);
+        console.log("Surveys",surveysArray);
         surveys = surveysArray;
     })
-
-    function handleLink() {
-
-    }
 
     async function handleDelete(survey) {
         const response = await fetch($baseURL + '/api/surveys/' + survey.id, {
@@ -46,7 +42,9 @@
                     <Link class="link" to="/surveys/edit/{survey.id}">
                         <button class="btn">Edit</button>
                     </Link> 
-                        <button class="btn" on:click="{handleLink}">Copy Link</button>
+                    <Link class="link" to="/takeSurvey/{survey.id}">
+                        <button class="btn">Open Survey</button>
+                    </Link>
                         <button class="btn" on:click="{handleDelete(survey)}">Delete</button>
                 </div>
             </div>

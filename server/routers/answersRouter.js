@@ -1,4 +1,4 @@
-import { Router } from "express";
+ import { Router } from "express";
 const router = Router();
 import db from "../database/createConnection.js";
 // import { getIO } from "../socket.js"
@@ -15,8 +15,6 @@ router.get("/api/answers/questions/:id", async (req, res) => {
             INNER JOIN answers ON answers.questionid = questions.id WHERE questionid = ?`, questionid);
         if (surveyUser && surveyUser.userid === userid) {
             const answers = await db.all(`SELECT * FROM answers WHERE questionid = ?;`, questionid);
-            // const io = getIO();
-            // io.emit("answersocket")
             return res.send({ data: answers });
         }
         return res.send({error: "wrong user"});
@@ -24,12 +22,31 @@ router.get("/api/answers/questions/:id", async (req, res) => {
     res.send({error: "not logged in"});
 });
 
+//################# GET preset answers ####################
+router.get("/api/answers/preset/questions/:id", async (req, res) => {
+    const questionid = Number(req.params.id);
+    const answers = await db.all(`SELECT * FROM answers WHERE questionid = ? AND preset = 1;`, questionid);
+    if(answers.length !== 0) {
+        return res.send({ data: answers });
+    }
+    res.send({error: "No Preset Answers For questionID: " + questionid});
+});
 
 //################# POST answer ####################
 router.post("/api/answers", async (req, res) => {
-    const { answer, questionid } = req.body;
-    const { changes } = await db.run(`INSERT INTO answers (answer, questionid) VALUES (?, ?, ?);`, [answer, questionid]);
-    return res.send({ rowsAffected: changes });
+    const { answers } = req.body;
+    if(answers) {
+        if(answers.length !== 0) {
+            answers.map(async answer => {
+                await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [answer.newAnswer, false, answer.questions.id]);
+            });
+            return res.send({ data: "Successfully saved answers" })
+        } else {
+            await db.run(`INSERT INTO answers (answer, preset, questionid) VALUES (?, ?, ?);`, [answers.newAnswer, false, answers.questions.id]);
+            return res.send({ data: "Successfully saved answer" })
+        }
+    }
+    res.send({ error: "No answers submitted" });
 });
 
 //################# POST preset answer ####################

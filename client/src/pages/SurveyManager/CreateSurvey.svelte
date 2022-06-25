@@ -46,7 +46,7 @@
                 theme: {
                     '--toastBackground': '#F56565',
                     '--toastBarBackground': '#C53030'
-            }});
+                }});
             }
         } else {
             toast.push("Please add a title", {

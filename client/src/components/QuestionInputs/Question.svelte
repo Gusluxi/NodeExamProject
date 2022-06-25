@@ -2,6 +2,7 @@
     import { submittable, surveyId, baseURL } from "../../stores/generalStore.js";
 	import CheckboxAnswer from "../AnswerInputs/CheckboxAnswer.svelte";
 	import DateAnswer from "../AnswerInputs/DateAnswer.svelte";
+	import NumberAnswer from "../AnswerInputs/NumberAnswer.svelte";
 	import RadioAnswers from "../AnswerInputs/RadioAnswers.svelte";
 	import RatingAnswer from "../AnswerInputs/RatingAnswer.svelte";
 	import TextAnswer from "../AnswerInputs/TextAnswer.svelte";
@@ -92,6 +93,7 @@
 		<option value="3">Checkbox</option>
 		<option value="4">Radio Select</option>
 		<option value="5">Date</option>
+		<option value="6">Number</option>
 	</select>
 	<h3>Ask a Question</h3>
 	<textarea class="text-area" on:change={checkSubmit} bind:value="{newQuestion}" placeholder="Write the question here" cols="50" rows="3" maxlength="150"></textarea>
@@ -134,6 +136,9 @@
 	{/if}
 	{#if selected && Number(selected) === 5}
 		<DateAnswer />
+	{/if}
+	{#if selected && Number(selected) === 6}
+		<NumberAnswer />
 	{/if}
 
 </div>

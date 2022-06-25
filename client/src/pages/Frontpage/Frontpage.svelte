@@ -9,33 +9,8 @@
     {#if ($user.loggedIn)}
 		<h1>Welcome {$user.currentUser.username}</h1>
 	{/if}
-    <h2>Take - create - experience Surveys in a stellar new vision</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
-    <h2>Scroll</h2>
+    <h2>Take. Create. Experience Surveys in a new fashion</h2>
+
 </div>
 
 <style>

@@ -14,21 +14,21 @@
         // socket.connect();
         const response = await fetch($baseURL + "/api/questions/surveys/" + $params.id);
         const { data: questionsArray } = await response.json();
-        console.log(questionsArray);
-        questions = await questionsArray;
+        questions = questionsArray;
         await questions.map(async question => {
-            console.log(question.id);
+            console.log("Question ID",question.id);
             const response = await fetch($baseURL + "/api/answers/questions/" + question.id)
             const { data: answersArray } = await response.json();
-            questionAnswers = await questionAnswers.concat({question: question, answers: answersArray ? answersArray : false});
-            console.log(answersArray);
+            
+            questionAnswers = questionAnswers.concat({question: question, answers: answersArray ? answersArray : false});
+            console.log("Questions and answers:", questionAnswers);
+            questionAnswers.sort(function(a, b) { 
+                return a.question.id - b.question.id  ||  a.name.localeCompare(b.name);
+            });
         })
     })
-    console.log("Questions and answers:", questionAnswers);
-    console.log(questionAnswers);
-    questionAnswers.forEach( element => {
-    console.log("lol",element.question)
-    })
+  
+  
 
 
     // const socket = io('ws:http://localhost:3000');
@@ -41,36 +41,42 @@
 </script>
     
 <h1>Statistics Survey</h1>
-{#each questionAnswers as questionAnswer}
+{#each questionAnswers as questionAnswer (questionAnswer.question.id)}
     <table>
         <thead>
             <tr>
-                <th colspan="2">{questionAnswer.question.question}</th>
+                <th>{questionAnswer.question.question}</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>
-                    preset answer
-                </td>
-                <td>
-                    user answer
-                </td>
-            </tr>
+            {#if questionAnswer.answers === false}
+                <tr>
+                    <td>
+                        No answers available
+                    </td>
+                </tr>
+            {:else}
+                {#each questionAnswer.answers as answer}
+                {#if !answer.preset}
+                    <tr>
+                        <td>
+                            Answer: {answer.answer}
+                        </td>
+                    </tr>
+                {/if}
+                {/each}
+            {/if}
         </tbody>
     </table>
 {:else}
 <table>
     <thead>
         <tr>
-            <th colspan="2">Loading questions...</th>
+            <th>Loading questions...</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>
-                Loading preset answers...
-            </td>
             <td>
                 Loading user answers...
             </td>
