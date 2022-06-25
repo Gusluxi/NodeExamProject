@@ -94,9 +94,12 @@ router.get("/logout", (req, res) => {
 
 
 //################# Session information ####################
-router.get("/info/session", (req, res) => {
-    console.log(req.session);
-    res.send(req.session)
+router.get("/info/session/login", (req, res) => {
+    if(req.session.loggedIn) {
+        return res.send({loggedIn: true});
+    } else {
+        res.send({loggedIn: false});
+    }
 })
 
 

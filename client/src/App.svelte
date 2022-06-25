@@ -1,5 +1,6 @@
 <script>
 	//Imports
+	import { onMount } from "svelte";
 	import { Link, Router, Route } from "svelte-navigator";
 	import { SvelteToast, toast } from '@zerodevx/svelte-toast';
 	import { user } from "./stores/authStore.js";
@@ -19,7 +20,7 @@
 	import StatsSurvey from "./pages/SurveyManager/StatisticSurvey.svelte";
 	import PrivateRoute from "./routes/PrivateRoute.svelte";
 
-
+	
 	const options = { initial: 0, next:0, onpop: () => {toast.pop(0)}, intro: { y: -64 } };
 	let toastClass = "center";
 	const cookieText = 'We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept Cookies", you consent to our use of cookies. Alternatively you can click "Cookie Settings" to adjust which cookies to accept'
@@ -27,14 +28,20 @@
 	async function handleLogout() {
 		const response = await fetch($baseURL + '/logout');
         const result = await response.json();
-        console.log(result);
-        
         if (result.loggedIn === false) {
             user.set(result.loggedIn)
 			localStorage.clear();
 			user.currentuser.set({})
         }
 	}
+
+	onMount(async () => {
+		const response= await fetch($baseURL + "/info/session/login")
+		const { loggedIn } = await response.json();
+		if(loggedIn === false) {
+			localStorage.clear();
+		}
+	})
 	
 </script>
 <GdprBanner cookieName="Stellar Cookie" description={cookieText}/>
