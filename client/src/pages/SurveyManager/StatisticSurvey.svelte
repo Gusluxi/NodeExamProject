@@ -98,7 +98,7 @@
     }
     table {
         width: 400px;
-        font-size: 1.2rem;
+        font-size: 0.9rem;
         margin:4px;
     }
     #table-wrapper{
