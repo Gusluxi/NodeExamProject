@@ -12,43 +12,37 @@ import helmet from "helmet";
 app.use(helmet());
 
 //################# Rate Limiter ####################
-//overvej hvor mange comments er nødvendige her i forhold til product ready code
 import rateLimit from "express-rate-limit";
 
+//Limiter for all requests
 const baseLimiter = rateLimit({
-    //the line below limits the window auth times, after 15 minutes the limit will be reset
 	windowMs: 15 * 60 * 1000, // 15 minutes
-    //The client is allowed to access 5 times
-	max: 100, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	max: 300, // Limit each IP to 300 requests per `window`
+	standardHeaders: true, 
+	legacyHeaders: false, 
 });
-
+//Limits for signup attempts
 const signupLimiter = rateLimit({
-    //the line below limits the window auth times, after 15 minutes the limit will be reset
 	windowMs: 5 * 60 * 1000, // 5 minutes
-    //The client is allowed to access 5 times
-	max: 10, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	max: 10, // Limit each IP to 10 requests per `window`
+	standardHeaders: true,
+	legacyHeaders: false,
 });
 
+//limits for login attempts
 const loginLimiter = rateLimit({
-    //the line below limits the window auth times, after 15 minutes the limit will be reset
 	windowMs: 5 * 60 * 1000, // 5 minutes
-    //The client is allowed to access 5 times
-	max: 5, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	max: 5, // Limit each IP to 5 requests per `window`
+	standardHeaders: true, 
+	legacyHeaders: false, 
 });
 
+//Limits for validating data
 const validationLimiter = rateLimit({
-    //the line below limits the window auth times, after 15 minutes the limit will be reset
 	windowMs: 5 * 60 * 1000, // 5 minutes
-    //The client is allowed to access 5 times
-	max: 30, // Limit each IP to 5 requests per `window` (here, per 15 minutes)
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	max: 30, // Limit each IP to 30 requests per `window`
+	standardHeaders: true,
+	legacyHeaders: false,
 });
 
 app.use(baseLimiter);
@@ -80,19 +74,16 @@ io.on("connection", (socket) => {
    	console.log("starting socket connection with id", socket.id)
 });
 
-
 //################# Routers ####################
 import usersRouter from "./routers/usersRouter.js";
 import surveysRouter from "./routers/surveysRouter.js";
 import answersRouter from "./routers/answersRouter.js";
 import questionsRouter from "./routers/questionsRouter.js";
 app.use(usersRouter, surveysRouter, answersRouter, questionsRouter);
-//Redirects to "/" if refreshed. Developer useful. Delete for ready code.
+//Redirects to "/" if refreshed.
 app.get('*', (req, res) => {
 	res.sendFile(path.resolve("../client/public/index.html"));
 });
-
-
 
 //################# Server ####################
 const PORT = process.env.PORT || 3000;
