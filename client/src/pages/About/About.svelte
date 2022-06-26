@@ -1,3 +1,6 @@
+<script>
+    //import { location, navigate } from 'svelte-routing'
+</script>
 <h1>How does it work?</h1>
 <div class="text-field">
     <p>This is a "create your own survey" application. 

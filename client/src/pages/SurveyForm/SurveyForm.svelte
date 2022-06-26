@@ -6,13 +6,18 @@
     
     const params = useParams();
     const navigate = useNavigate();
+    const maxAnswerLength = 150;
+    const maxNumber = 10; //1 billion
+
     let filledInputs;
     let questions;
     let questionPreAnswers = [];
     let surveyId = $params.id;
-    console.log($params);
+    let answerWarning = "";
+    let numberWarning = "";
 
     onMount(async () => {
+        toast.pop(0)
         const response = await fetch($baseURL + "/api/questions/surveys/" + surveyId);
         const { data: questionsArray } = await response.json();
         questions = questionsArray;
@@ -20,13 +25,11 @@
             if(question.questiontype === 3 || question.questiontype === 4) {
                 const response = await fetch($baseURL + "/api/answers/preset/questions/" + question.id)
                 const { data: answersArray, error: errormsg } = await response.json();
-                console.log("Answers",answersArray, "Error", errormsg);
                 if (question.questiontype === 3) {
                     questionPreAnswers = questionPreAnswers.concat({questions: question, answers: errormsg ? false : answersArray, newAnswer: []});
                 } else {
                     questionPreAnswers = questionPreAnswers.concat({questions: question, answers: errormsg ? false : answersArray, newAnswer: ""});
                 }
-                console.log("Questions and preset answers:", questionPreAnswers);
             } else {
                 questionPreAnswers = questionPreAnswers.concat({questions: question, answers: false, newAnswer: ""});
             }
@@ -35,6 +38,25 @@
             });
         })
     })
+
+    function checkAnswer(event) {
+        if(event.target.value.length >= maxAnswerLength) {
+            event.target.value = event.target.value.substr(0, maxAnswerLength)
+            answerWarning = "Max "+maxAnswerLength+" characters";
+        }
+        if(event.target.value.length < maxAnswerLength) {
+            answerWarning = "";
+        }
+    }
+    function checkNumber(event) {
+        if(event.target.value.length >= maxNumber) {
+            event.target.value = event.target.value.substr(0, maxNumber)
+            numberWarning = "Max number is "+maxNumber+" digits";
+        }
+        if(event.target.value.length < maxNumber) {
+            numberWarning = "";
+        }
+    }
 
     async function submitAnswers() {
         filledInputs = true;
@@ -61,7 +83,6 @@
                 })
 		    });
 		    const result = await response.json();
-            console.log(result);
             if (response.status === 200) {
                 toast.push("Form submitted, Thank you!", {
                     theme: {
@@ -85,11 +106,13 @@
     {#each questionPreAnswers as qna}
         <h3 class="question-header">{qna.questions.question}</h3>
         {#if qna.questions.questiontype === 1}
-            <textarea class="text-area" bind:value="{qna.newAnswer}" placeholder='"Write your answer here..."' cols="50" rows="4" maxlength="200"></textarea>
+            <textarea on:input={checkAnswer} class="text-area" bind:value="{qna.newAnswer}" placeholder='"Write your answer here..."' cols="50" rows="4" maxlength="200"></textarea>
+            {answerWarning}
         {/if}
 
         {#if qna.questions.questiontype === 2}
-            <input type="scale" bind:value={qna.newAnswer}>
+            <input type="range" bind:value={qna.newAnswer} min=1 max=5>
+            <p>Range: {qna.newAnswer ? qna.newAnswer : qna.newAnswer = 3}</p>
         {/if}
 
         {#if qna.questions.questiontype === 3}
@@ -138,7 +161,8 @@
         {/if}
 
         {#if qna.questions.questiontype === 6}
-            <input type="number" bind:value={qna.newAnswer}>
+            <input on:input={checkNumber} type="number" bind:value={qna.newAnswer}>
+            {numberWarning}
         {/if}
     {:else}
         <p>Loading Questions...</p>

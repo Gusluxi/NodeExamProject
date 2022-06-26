@@ -1,10 +1,9 @@
 <script>
     export let preAnswer;
-    console.log(preAnswer);
 </script>
 <div class="radio-answer">
     <input class="radio" type="radio" disabled>
-    <p>{preAnswer ? preAnswer : "Answer here"}</p>
+    <p>{preAnswer ? preAnswer : '"Your Preset Answer here"'}</p>
     
 </div>
 
@@ -13,6 +12,7 @@
         display: flex;
         padding: 10px;
         padding-top: 0px;
+        word-wrap: break-word;
     }
     .radio {
         margin-top: 18px;

@@ -8,11 +8,17 @@
 	import TextAnswer from "../AnswerInputs/TextAnswer.svelte";
 
 	const maxAnswers = 10;
+	const maxQuestionLength = 150;
+	const maxAnswerLength  = 100;
+
 	let questionsPostedId;
 	let selected;
 	let newQuestion;
 	let count = 0;
     let answersArray = [];
+	let warningQuestion = "";
+	let warningAnswer = "";
+
 	$: $surveyId, saveQuestion();
 
 	addAnswer();
@@ -29,6 +35,25 @@
 			submittable.set(false);
 		}
 	}
+
+	function checkQuestion(event) {
+        if(event.target.value.length >= maxQuestionLength) {
+            event.target.value = event.target.value.substr(0, maxQuestionLength)
+            warningQuestion = "Max "+maxQuestionLength+" characters";
+        }
+        if(event.target.value.length < maxQuestionLength) {
+            warningQuestion = "";
+        }
+    }
+	function checkAnswer(event) {
+        if(event.target.value.length >= maxAnswerLength) {
+            event.target.value = event.target.value.substr(0, maxAnswerLength)
+            warningAnswer = "Max "+maxAnswerLength+" characters";
+        }
+        if(event.target.value.length < maxAnswerLength) {
+            warningAnswer = "";
+        }
+    }
 
     function addAnswer() {
         count += 1;
@@ -100,8 +125,8 @@
 		<option value="6">Number</option>
 	</select>
 	<h3>Ask a Question</h3>
-	<textarea class="text-area" on:change={checkSubmit} bind:value="{newQuestion}" placeholder="Write the question here" cols="50" rows="3" maxlength="150"></textarea>
-	
+	<textarea class="text-area" on:input={checkQuestion} on:change={checkSubmit} bind:value="{newQuestion}" placeholder="Write the question here" cols="50" rows="3"></textarea>
+	{warningQuestion}
 </div>
 <div class="answer-box">
 	{#if newQuestion}
@@ -119,7 +144,8 @@
 	{/if}
 	{#if selected && Number(selected) === 3}
 		{#each answersArray as answerNumber (answerNumber)}
-			<input on:change={checkSubmit(answerNumber.answer)} placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
+			<input on:input={checkAnswer} on:change={checkSubmit(answerNumber.answer)} placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
+			{warningAnswer}
 			<CheckboxAnswer preAnswer={answerNumber.answer} />
 		{/each}
 		{#if (count < maxAnswers)}
@@ -131,7 +157,8 @@
 	{/if}
 	{#if selected && Number(selected) === 4}
 		{#each answersArray as answerNumber (answerNumber)}
-			<input on:change={checkSubmit(answerNumber.answer)} placeholder="What's a possible answer?" bind:value={answerNumber.answer}>
+			<input on:input={checkAnswer} on:change={checkSubmit(answerNumber.answer)} placeholder="Write a preset answer" bind:value={answerNumber.answer}>
+			{warningAnswer}
 			<RadioAnswers preAnswer={answerNumber.answer} />
 		{/each}
 		{#if (count < maxAnswers)}
@@ -160,6 +187,9 @@
 	}
 	.question-select {
 		width: 200px;
+	}
+	.answer-box {
+		word-wrap: break-word;
 	}
 
 	input, textarea, button {

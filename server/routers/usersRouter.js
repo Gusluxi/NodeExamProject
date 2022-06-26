@@ -34,7 +34,6 @@ router.post("/valid/username", async (req, res) => {
 //################# Signup ####################
 router.post("/auth/signup", async (req, res) => {
     const newUser = req.body;
-    console.log(newUser);
     if (newUser.email && newUser.username && newUser.password) { //If they all exists.
         if(req.session.usernameExists) {
             return res.send({ error: "Username already exists"})

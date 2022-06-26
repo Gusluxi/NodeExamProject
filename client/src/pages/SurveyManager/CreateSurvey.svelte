@@ -7,10 +7,12 @@
     const navigate = useNavigate();
     const location = useLocation();
     const maxQuestions = 30;
+    const maxTitleLength = 30;
 
 	let title;
     let count = 0;
     let questionsArray = [];
+    let warningTitle = "";
 
     addQuestion()
 
@@ -24,9 +26,18 @@
         questionsArray.splice(count,1)
         questionsArray = questionsArray;
     }
-	
+    function checkTitle(event) {
+        if(event.target.value.length >= maxTitleLength) {
+            event.target.value = event.target.value.substr(0, maxTitleLength)
+            warningTitle = "Max "+maxTitleLength+" characters";
+        }
+        if(event.target.value.length < maxTitleLength) {
+            warningTitle = "";
+        }
+    }
+    
 	async function newSurvey() {
-        if(title) {
+        if(title || title.length < maxTitleLength) {
             if($submittable) {
                 const response = await fetch($baseURL + '/api/surveys', {
                     method: 'POST',
@@ -52,11 +63,21 @@
                 }});
             }
         } else {
-            toast.push("Please add a title", {
-                theme: {
-                    '--toastBackground': '#F56565',
-                    '--toastBarBackground': '#C53030'
-            }});
+            if(!title) {
+                toast.push("Please add a title.", {
+                    theme: {
+                        '--toastBackground': '#F56565',
+                        '--toastBarBackground': '#C53030'
+                    }
+                });
+            } else {
+                toast.push("Title can contain a maximum of 30 characters.", {
+                    theme: {
+                        '--toastBackground': '#F56565',
+                        '--toastBarBackground': '#C53030'
+                    }
+                });
+            }
         }
 	}
 
@@ -64,8 +85,8 @@
 <div class="question-wrapper">
     <h1>Create Survey</h1>
     Survey Title:
-    <input bind:value={title} placeholder="Title">
-   
+    <input id="title" bind:value={title} on:input={checkTitle} placeholder="Survey Title">
+    {warningTitle}
         {#if questionsArray}
             <div class="question-div">
             {#each questionsArray as questionNumber}
@@ -81,13 +102,14 @@
             {/if}
         {/if}
     
-    
-    
-    
     <button class="btn" on:click="{newSurvey}">Complete Survey</button>
 </div>
 
 <style>
+    #title {
+        width: 350px;
+    }
+
     .question-wrapper {
         width: 50%;
         margin: auto;

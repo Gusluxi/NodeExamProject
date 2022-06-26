@@ -113,7 +113,6 @@
 			})
 		    });
             const result = await response.json();
-            console.log(result);
             if (result.rowsAffected > 0) {
                 toast.push("Account created!")
                 const from = ($location.state && $location.state.from) || "/login";

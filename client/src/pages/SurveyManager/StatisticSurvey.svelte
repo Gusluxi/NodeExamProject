@@ -1,5 +1,5 @@
 <script>
-    import { Link, useParams } from  "svelte-navigator";
+    import { useParams } from  "svelte-navigator";
     import { onMount } from "svelte";
     import { baseURL } from "../../stores/generalStore.js";
     import { toast } from "@zerodevx/svelte-toast";
@@ -27,7 +27,6 @@
     
     const socket = io();
     socket.on('postAnswers', ({ answers })=>{
-        console.log(answers);
         questionAnswers.map(questionAnswer => {
             answers.map(answer => {
                 if(answer.questions.id === questionAnswer.question.id) {
@@ -45,50 +44,51 @@
 </script>
     
 <h1>Statistics Survey</h1>
-{#each questionAnswers as questionAnswer (questionAnswer.question.id)}
+<div id="table-wrapper">
+    {#each questionAnswers as questionAnswer (questionAnswer.question.id)}
+        <table>
+            <thead>
+                <tr>
+                    <th>{questionAnswer.question.question}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#if questionAnswer.answers === false}
+                    <tr>
+                        <td>
+                            No answers available
+                        </td>
+                    </tr>
+                {:else}
+                    {#each questionAnswer.answers as answer, i}
+                    {#if !answer.preset}
+                        <tr>
+                            <td>
+                                Answer: {answer.answer}
+                            </td>
+                        </tr>
+                    {/if}
+                    {/each}
+                {/if}
+            </tbody>
+        </table>
+    {:else}
     <table>
         <thead>
             <tr>
-                <th>{questionAnswer.question.question}</th>
+                <th>Loading questions...</th>
             </tr>
         </thead>
         <tbody>
-            {#if questionAnswer.answers === false}
-                <tr>
-                    <td>
-                        No answers available
-                    </td>
-                </tr>
-            {:else}
-                {#each questionAnswer.answers as answer}
-                {#if !answer.preset}
-                    <tr>
-                        <td>
-                            Answer: {answer.answer}
-                        </td>
-                    </tr>
-                {/if}
-                {/each}
-            {/if}
+            <tr>
+                <td>
+                    Loading user answers...
+                </td>
+            </tr>
         </tbody>
     </table>
-{:else}
-<table>
-    <thead>
-        <tr>
-            <th>Loading questions...</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                Loading user answers...
-            </td>
-        </tr>
-    </tbody>
-</table>
-{/each}
- 
+    {/each}
+</div>
 
 <style>
     table, tbody, thead, td, th{
@@ -97,8 +97,12 @@
         background-color: #6767d7;
     }
     table {
-        width: 600px;
+        width: 400px;
         font-size: 1.2rem;
-        margin:auto;
+        margin:4px;
+    }
+    #table-wrapper{
+        display:flex;
+        justify-items:left;
     }
 </style>

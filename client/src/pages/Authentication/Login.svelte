@@ -11,9 +11,6 @@
     let password;
     let attemptsRemaning;
 
-    console.log($user);
-     
-
     async function login() {
         if (attemptsRemaning === 0) {
             toast.push("No more attempts available, Try again in 5 minutes", {

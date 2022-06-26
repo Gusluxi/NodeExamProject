@@ -15,15 +15,13 @@
 	import Frontpage from "./pages/Frontpage/Frontpage.svelte";
 	import SurveyForm from "./pages/SurveyForm/SurveyForm.svelte";
 	import CreateSurvey from "./pages/SurveyManager/CreateSurvey.svelte";
-	import EditSurvey from "./pages/SurveyManager/EditSurvey.svelte";
 	import OverviewSurvey from "./pages/SurveyManager/OverviewSurvey.svelte";
 	import StatsSurvey from "./pages/SurveyManager/StatisticSurvey.svelte";
 	import PrivateRoute from "./routes/PrivateRoute.svelte";
 
-	
 	const options = { initial: 0, next:0, onpop: () => {toast.pop(0)}, intro: { y: -64 } };
-	let toastClass = "center";
 	const cookieText = 'We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept Cookies", you consent to our use of cookies. Alternatively you can click "Cookie Settings" to adjust which cookies to accept'
+	let toastClass = "center";
 
 	async function handleLogout() {
 		const response = await fetch($baseURL + '/logout');
@@ -68,11 +66,11 @@
 		</nav>
 		
 		
-		<Route path="/" component={Frontpage} />
-		<Route path="/about" component={About} />
-		<Route path="/login" component={Login} />
-		<Route path="/signup" component={Signup} />
-		<Route path="/takeSurvey/:id" component={SurveyForm} />
+		<Route path="/"><Frontpage /></Route>
+		<Route path="/about"><About /></Route>
+		<Route path="/login"><Login /></Route>
+		<Route path="/signup"><Signup /></Route>
+		<Route path="/takeSurvey/:id" ><SurveyForm /></Route>
 
 		<PrivateRoute path="/surveys/view" let:location>
 			<OverviewSurvey />
@@ -80,10 +78,6 @@
 		
 		<PrivateRoute path="/surveys/stats/:id" let:location>
 			<StatsSurvey />
-		</PrivateRoute>
-		
-		<PrivateRoute path="/surveys/edit/:id" let:location>
-			<EditSurvey />
 		</PrivateRoute>
 		
 		<PrivateRoute path="/newsurvey" let:location>

@@ -1,5 +1,10 @@
 <script>
     	import { user } from "../../stores/authStore.js";
+        import { onMount } from "svelte";
+        import { toast } from '@zerodevx/svelte-toast';
+        onMount(() => {
+            toast.pop(0)
+        })
 </script>
 <div>
     <div id="logo-wrapper">

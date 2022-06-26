@@ -32,7 +32,6 @@ router.post("/api/surveys", async (req, res) => {
         const { title } = req.body;
         if (title) {
             const feedback = await db.run(`INSERT INTO surveys (title, userid) VALUES (?, ?);`, [title, userid]);
-            console.log(feedback);
             return res.send({ rowsAffected: feedback.changes, postedId: feedback.lastID })
         }
         return res.send({error: "No Title Provided"});
